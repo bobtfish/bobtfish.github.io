@@ -1,0 +1,13 @@
+---
+layout: post
+title: "New blog."
+date: 2013-07-13 09:24
+comments: true
+categories: 
+---
+
+Finally got around to creating a personal blog in which to ramble about stuff I'm thinking about
+and/or working on.
+
+Expect perl, ruby, puppet, mcollective, sysadmin nonsense &amp; arduinos if you're lucky.
+
