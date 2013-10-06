@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: puppet | t0m's Blog]]></title>
+  <link href="http://bobtfish.github.io/blog/categories/puppet/atom.xml" rel="self"/>
+  <link href="http://bobtfish.github.io/"/>
+  <updated>2013-10-07T00:37:48+01:00</updated>
+  <id>http://bobtfish.github.io/</id>
+  <author>
+    <name><![CDATA[Tomas Doran]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Read only bind mounts and docker for unix domain sockets]]></title>
+    <link href="http://bobtfish.github.io/blog/2013/10/06/read-only-bind-mounts-and-docker/"/>
+    <updated>2013-10-06T23:48:00+01:00</updated>
+    <id>http://bobtfish.github.io/blog/2013/10/06/read-only-bind-mounts-and-docker</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been playing around with <a href="http://docker.io">Docker</a> a load recently, and I&rsquo;ve developed a nice
+little pattern for sharing sockets that I&rsquo;m gonna pass on. (By sockets, I specifically
+mean <a href="http://en.wikipedia.org/wiki/Unix_domain_socket">Unix domain sockets</a>) for the purposes
+of this post.</p>
+
+<p>A lot of applications can either use a TCP socket, or a Unix domain socket to communicate &ndash; for
+example <a href="http://www.fastcgi.com/drupal/">FastCGI</a> and <a href="MySQL">http://www.mysql.com/</a> both
+allow you to use either mode (and in the case of mysql, both).</p>
+
+<p>I have a small home server, and a want to run a bunch of applications that inside containers
+(for security and management reasons), and these applications need to speak to a mysql server
+(via a unix domain socket &ndash; which just appears to be a file on the filesystem.</p>
+
+<p>I also want to run the mysql server inside a container &ndash; so the mechanics of getting a socket
+shared between them are a little non-trivial.</p>
+
+<p>Lets go through a worked example of how I&rsquo;ve solved this for the dovecot imap and pop3 server
+talking to mysql. This is an especially fun example, as dovecot runs as root (within it&rsquo;s container)
+so if someone hacked into the server through an exploit in dovecot &ndash; they can rm -rf anything
+I share with that container&hellip;</p>
+
+<p>First off, I&rsquo;ve created some <a href="http://en.wikipedia.org/wiki/Logical_Volume_Manager_%28Linux%29">LVM</a> volumes:</p>
+
+<blockquote><p> mysql        vg0  -wi-ao   4.00g</p></blockquote>
+
+<p>This is the mysql data directory, which will be mounted in the mysql container as /var/lib/mysql</p>
+
+<blockquote><p> mysql_socket vg0  -wi-ao   4.00m</p></blockquote>
+
+<p>This is going to get mounted at /socket/mysql inside containers, and will hold the mysql Unix domain socket</p>
+
+<blockquote><p> vmail        vg0  -wi-ao  20.00g</p></blockquote>
+
+<p>And this is my mail spool for dovecot with all the emails in it.</p>
+
+<p>The immediate problem with this is that if the mysql socket volume is shared between multiple other containers
+(as dovecot won&rsquo;t be the only app using this mysql instance), as dovecot runs as &lsquo;root&rsquo;, then if it gets hacked,
+the hacker can delete the mysql socket, and any other programs trying to connect to mysql through that
+socket will be affected.</p>
+
+<p>We can&rsquo;t allow that &ndash; that would defeat the entire point of using containers for application isolation!</p>
+
+<p>The trick is that you only need read access to use a unix domain socket that some other program has created.</p>
+
+<p>Therefore, we can use <a href="http://docs.1h.com/Bind_mounts">bind mounts</a> to fix this &ndash; by re-binding a readonly
+(-o ro) copy of the file system, and giving <em>that</em> to dovecot would stop these issues, easy&hellip;</p>
+
+<p>So, our partitions get mounted like this:</p>
+
+<blockquote><p>/dev/mapper/vg0-vmail on /mnt/volumes/vmail type ext3 (rw,noatime)
+/dev/mapper/vg0-mysql on /mnt/volumes/mysql type ext3 (rw,noatime)
+/dev/mapper/vg0-mysql_socket on /mnt/volumes/mysql_socket type ext3 (rw,noatime)
+/mnt/volumes/mysql_socket on /mnt/volumes_ro/mysql_socket type none (ro,bind)</p></blockquote>
+
+<p>The last line involves a little trick. When I tried this, to my dismay, it didn&rsquo;t work.</p>
+
+<p>The /etc/fstab entry associated with it is:</p>
+
+<blockquote><p>/mnt/volumes/mysql_socket /mnt/volumes_ro/mysql_socket    none    bind,ro 00 00</p></blockquote>
+
+<p>But <a href="https://www.google.co.uk/search?q=bind+mount+read+only">as you can see</a> from the Googles,
+read only bind mounts are a bit tricky &ndash; you have to re-mount them a second time to make them
+read-only.</p>
+
+<p>The trick I use here is twofold &ndash; one, I only create them with puppet (mostly using the excelent
+<a href="https://forge.puppetlabs.com/AlexCline/mounts">mounts module</a> (which I only had to patch <a href="https://github.com/bobtfish/puppet-mounts/commit/abe73f82064f01bccd45289eb4f4ce51353ca364">a little bit</a>),
+the associated code looks like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>  mounts <span class="o">{</span> &amp;ldquo;Mount volume <span class="k">${</span><span class="nv">name</span><span class="k">}</span> <span class="nb">bind </span>to ro&amp;rdquo;:&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;ensure <span class="o">=</span>&amp;gt; present,
+</span><span class='line'><span class="nb">source</span> <span class="o">=</span>&amp;gt; <span class="s2">&quot;/mnt/volumes/${name}&quot;</span>,
+</span><span class='line'><span class="nv">dest</span>   <span class="o">=</span>&amp;gt; <span class="s2">&quot;/mnt/volumes_ro/${name}&quot;</span>,
+</span><span class='line'><span class="nb">type</span>   <span class="o">=</span>&amp;gt; <span class="s1">&#39;none&#39;</span>,
+</span><span class='line'><span class="nv">opts</span>   <span class="o">=</span>&amp;gt; <span class="s1">&#39;bind,ro&#39;</span>, <span class="c"># Note bind mount ignores ro till you remount, thus the trickery below</span>
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;  <span class="o">}</span>
+</span><span class='line'>  &amp;ndash;&gt;
+</span><span class='line'>  <span class="nb">exec</span> <span class="o">{</span> &amp;ldquo;/bin/mount -o remount,ro &amp;lsquo;/mnt/volumes_ro/<span class="k">${</span><span class="nv">name</span><span class="k">}</span>&amp;rsquo;&amp;rdquo;:&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;onlyif <span class="o">=</span>&amp;gt; <span class="s2">&quot;/bin/mount -l | /bin/grep &#39;/mnt/volumes/${name} on /mnt/volumes_ro/${name} type none (rw,bind)&#39;&quot;</span>
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>This could be notify rather than just ordering &ndash; but I like to be paranoiad and check these are ok
+every puppet run..</p>
+
+<p>However, if the machine is freshly rebooted, then the read-only file systems won&rsquo;t be remounted yet, ergo
+the second piece of cunning is an upstart script to make sure things as kosher after a reboot:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;/etc/init/remount-ro-bind-mounts.conf &amp;ndash; Dirty hack to remount ro <span class="nb">bind </span>mounts properly&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;description &amp;ldquo;Remount RO <span class="nb">bind </span>mount filesystems on boot&amp;rdquo;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;start on <span class="nb">local</span>-filesystems&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;console output&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;script
+</span><span class='line'>  <span class="k">for </span>fs in <span class="k">$(</span>cat /etc/fstab | awk &amp;lsquo;<span class="o">{</span> print <span class="nv">$2</span> &amp;ldquo; &amp;rdquo; <span class="nv">$4</span> <span class="o">}</span>&amp;rsquo; | grep &amp;lsquo;bind,ro<span class="nv">$&amp;</span>rsquo; | cut -d<span class="err">&#39;</span> &amp;lsquo; -f1<span class="k">)</span>; <span class="k">do </span>mount | grep rw,bind | awk &amp;rsquo;<span class="o">{</span> print <span class="nv">$3</span> <span class="o">}</span>&amp;lsquo; | grep <span class="nv">$fs</span> &gt;/dev/null; <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq 0 <span class="o">]</span>; <span class="k">then </span>mount -o remount,ro <span class="nv">$fs</span>; <span class="k">fi</span>; <span class="k">done</span>
+</span><span class='line'>end script
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>And there we go &ndash; all done(-ish). I just rsync the vmail spool and mysql data from another machine, and start it all up!</p>
+
+<p>The containers look like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>sudo docker ps
+</span><span class='line'>ID                  IMAGE                   COMMAND             CREATED             STATUS              PORTS
+</span><span class='line'>04a9da050ba8        t0m/dovecot:latest      /start run          25 minutes ago      Up 25 minutes       110-&gt;110, 143-&gt;143, 993-&gt;993, 995-&gt;995
+</span><span class='line'>20b3a7a65966        t0m/mysql:latest        /start run          About an hour ago   Up About an hour
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>And they get run with the upstart script from <a href="https://forge.puppetlabs.com/garethr/docker">Garth&rsquo;s excelent docker puppet module</a>:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>ps aux | grep &amp;lsquo;docker run&amp;rsquo; | grep -v grep
+</span><span class='line'>root     16874  0.0  0.0 273744  4944 ?        Ssl  Oct06   0:00 docker run -u mysql -v /mnt/volumes/mysql/data:/var/lib/mysql -v /mnt/volumes/mysql_socket:/socket -m 0 t0m/mysql:latest
+</span><span class='line'>root     28498  0.0  0.0 272336  4944 ?        Ssl  Oct06   0:00 docker run -v /mnt/volumes/vmail:/var/vmail -v /mnt/volumes_ro/mysql_socket/run:/socket/mysql -m 0 t0m/dovecot:latest
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>And last but not least, here&rsquo;s it working:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>openssl s_client -quiet -connect localhost:995
+</span><span class='line'><span class="nv">depth</span><span class="o">=</span>0 <span class="nv">C</span> <span class="o">=</span> GB, <span class="nv">ST</span> <span class="o">=</span> Greater London, <span class="nv">L</span> <span class="o">=</span> London, <span class="nv">O</span> <span class="o">=</span> bobtfish.net, <span class="nv">CN</span> <span class="o">=</span> mail.bobtfish.net
+</span><span class='line'>verify error:num<span class="o">=</span>18:self signed certificate
+</span><span class='line'>verify <span class="k">return</span>:1
+</span><span class='line'><span class="nv">depth</span><span class="o">=</span>0 <span class="nv">C</span> <span class="o">=</span> GB, <span class="nv">ST</span> <span class="o">=</span> Greater London, <span class="nv">L</span> <span class="o">=</span> London, <span class="nv">O</span> <span class="o">=</span> bobtfish.net, <span class="nv">CN</span> <span class="o">=</span> mail.bobtfish.net
+</span><span class='line'>verify <span class="k">return</span>:1
+</span><span class='line'>+OK Dovecot ready.
+</span><span class='line'>USER &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;&amp;#x6d;&amp;#97;&amp;#105;&amp;#108;&amp;#116;&amp;#111;&amp;#x3a;&amp;#x62;&amp;#x6f;&amp;#x62;&amp;#116;&amp;#x66;&amp;#105;&amp;#x73;&amp;#x68;&amp;#x40;&amp;#x62;&amp;#111;&amp;#98;&amp;#x74;&amp;#102;&amp;#105;&amp;#x73;&amp;#x68;&amp;#x2e;&amp;#110;&amp;#101;&amp;#x74;&quot;</span>&gt;&amp;#x62;&amp;#111;&amp;#x62;&amp;#x74;&amp;#x66;&amp;#x69;&amp;#x73;&amp;#x68;&amp;#x40;&amp;#98;&amp;#111;&amp;#x62;&amp;#116;&amp;#102;&amp;#105;&amp;#115;&amp;#x68;&amp;#46;&amp;#x6e;&amp;#101;&amp;#116;&lt;/a&gt;
+</span><span class='line'>+OK
+</span><span class='line'>PASS xxxxxx
+</span><span class='line'>+OK Logged in.
+</span><span class='line'>STAT
+</span><span class='line'>+OK 488 15003687
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+]]></content>
+  </entry>
+  
+</feed>

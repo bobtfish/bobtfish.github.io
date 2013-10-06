@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>The starwars methodology - t0m's Blog</title>
+  <meta name="author" content="Tomas Doran">
+
+  
+  <meta name="description" content="This seemingly isn&rsquo;t a well known term, and today I&rsquo;m irritated by people
+thinking I perform &lsquo;magic&rsquo; by using grep, so here& &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://bobtfish.github.io/blog/2013/10/05/the-starwars-methodology">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="t0m's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">t0m's Blog</a></h1>
+  
+    <h2>Trying to obey Rule Zero.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:bobtfish.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">The Starwars Methodology</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-05T00:25:00+01:00" pubdate data-updated="true">Oct 5<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This seemingly isn&rsquo;t a well known term, and today I&rsquo;m irritated by people
+thinking I perform &lsquo;magic&rsquo; by using grep, so here&rsquo;s a rant about what I call
+the &ldquo;<em>Star Wars</em>&rdquo; &trade; methodology of problem solving:</p>
+
+<p>To put it quite simply:</p>
+
+<blockquote><p>Use the Source Luke</p></blockquote>
+
+<p>Oftentimes grepping through the source code of the thing that&rsquo;s giving you
+trouble (even if it&rsquo;s written in a language you don&rsquo;t speak) will turn up
+gold.</p>
+
+<p>Given a basic model of OO languages, it&rsquo;s easily possible to infer what&rsquo;s
+going on (or what may be going on) most of the time given basic observations
+and a few print statements, or even a file and line number.</p>
+
+<p>Getting a full backtrace out of [most][<a href="https://metacpan.org/module/JJORE/App-Stacktrace-0.09/bin/perl-stacktrace">https://metacpan.org/module/JJORE/App-Stacktrace-0.09/bin/perl-stacktrace</a>] [dynamic][<a href="http://isotope11.com/blog/getting-a-ruby-backtrace-from-gnu-debugger">http://isotope11.com/blog/getting-a-ruby-backtrace-from-gnu-debugger</a>] [languages][<a href="https://wiki.python.org/moin/DebuggingWithGdb">https://wiki.python.org/moin/DebuggingWithGdb</a>] is real easy too, even in extreme cases..</p>
+
+<p>Even if you don&rsquo;t know for sure, some source diving will at least
+help give you more concrete ideas about how the code is built, which
+will allow you to frame the problem better when you do peresent it
+to someone with the relevant language and/or domain knowledge.</p>
+
+<p>Even if your assumptions were totally wrong &ndash; at at least look more
+initiative (and tried to go deeper) than your average Joe, so
+the expert is more likely to want to help you, as you&rsquo;re already
+demonstrated a provable desire to be taught to fish, rather than
+just be thrown them.</p>
+
+<p>&lt;/rant&gt;</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Tomas Doran</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-05T00:25:00+01:00" pubdate data-updated="true">Oct 5<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://bobtfish.github.io/blog/2013/10/05/the-starwars-methodology/" data-via="bobtfish" data-counturl="http://bobtfish.github.io/blog/2013/10/05/the-starwars-methodology/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/07/13/new-blog/" title="Previous Post: New blog.">&laquo; New blog.</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/10/06/read-only-bind-mounts-and-docker/" title="Next Post: Read only bind mounts and docker for unix domain sockets">Read only bind mounts and docker for unix domain sockets &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/06/read-only-bind-mounts-and-docker/">Read Only Bind Mounts and Docker for Unix Domain Sockets</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/05/the-starwars-methodology/">The Starwars Methodology</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/13/new-blog/">New Blog.</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/bobtfish">@bobtfish</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'bobtfish',
+            count: 10,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Tomas Doran -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
