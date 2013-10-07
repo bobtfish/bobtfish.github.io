@@ -144,3 +144,6 @@ PASS xxxxxx
 STAT
 +OK 488 15003687
 {% endcodeblock %}
+
+Next up, doing the same trickery for postfix, and then I'll have a working mail infrastructure that's entirely containerised.
+
