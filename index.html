@@ -9,8 +9,7 @@
   <meta name="author" content="Tomas Doran">
 
   
-  <meta name="description" content="I&rsquo;ve been playing around with Docker a load recently, and I&rsquo;ve developed a nice
-little pattern for sharing sockets that I&rsquo;m gonna &hellip;">
+  <meta name="description" content="Rewriting history when doing an svn to git migration is always fun. Especially when you start rewriting the entire contents of files. Take this ditty &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +65,50 @@ little pattern for sharing sockets that I&rsquo;m gonna &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/06/we-have-always-been-at-war-with-eastasia/">We Have Always Been at War With Eastasia</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-06T23:12:00+00:00" pubdate data-updated="true">Nov 6<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Rewriting history when doing an svn to git migration is always fun. Especially when you start rewriting the entire contents of files.</p>
+
+<p>Take this ditty for instance:</p>
+
+<blockquote><p>   git filter-branch -f &mdash;tree-filter &lsquo;for j in $(for i in $(find . -name *.pp | grep -v vendor | grep -v tmp); do cat $i |perl -ne&#8221;/(\s+)\S/&amp;&amp;\$e{length(\$1)}++;END {exit 0 if \$e{2}; exit 2}&ldquo;|| echo $i; done); do cat $j | perl -ne&rdquo;/^(\s+)/;\$s=length(\$1)/2;\$s=\&ldquo; &#34;x\$s;s/^\s+/\$s/;print&rdquo;>&ldquo;$j.new&rdquo; &amp;&amp; mv &ldquo;$j.new&rdquo; $j; done;find . -name *.pp | grep -v vendor | grep -v tmp | xargs puppet-lint &mdash;fix >/dev/null ||true&rsquo; HEAD</p></blockquote>
+
+<p>This switches my puppet codebase to the canonical 2 space (rather than 4 space) tabs and fixes lint/quoting issues &ndash; all the way back through history.</p>
+
+<p>I, for one, welcome our newold code layout overlords.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -399,6 +442,10 @@ and/or working on.</p>
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/06/we-have-always-been-at-war-with-eastasia/">We Have Always Been at War With Eastasia</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/06/read-only-bind-mounts-and-docker/">Read Only Bind Mounts and Docker for Unix Domain Sockets</a>

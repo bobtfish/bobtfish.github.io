@@ -4,7 +4,7 @@
   <title><![CDATA[t0m's Blog]]></title>
   <link href="http://bobtfish.github.io/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2013-10-07T09:43:05+01:00</updated>
+  <updated>2013-11-07T01:28:08+00:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -12,6 +12,23 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[We have always been at war with eastasia]]></title>
+    <link href="http://bobtfish.github.io/blog/2013/11/06/we-have-always-been-at-war-with-eastasia/"/>
+    <updated>2013-11-06T23:12:00+00:00</updated>
+    <id>http://bobtfish.github.io/blog/2013/11/06/we-have-always-been-at-war-with-eastasia</id>
+    <content type="html"><![CDATA[<p>Rewriting history when doing an svn to git migration is always fun. Especially when you start rewriting the entire contents of files.</p>
+
+<p>Take this ditty for instance:</p>
+
+<blockquote><p>   git filter-branch -f &mdash;tree-filter &lsquo;for j in $(for i in $(find . -name *.pp | grep -v vendor | grep -v tmp); do cat $i |perl -ne&#8221;/(\s+)\S/&amp;&amp;\$e{length(\$1)}++;END {exit 0 if \$e{2}; exit 2}&ldquo;|| echo $i; done); do cat $j | perl -ne&rdquo;/^(\s+)/;\$s=length(\$1)/2;\$s=\&ldquo; &#34;x\$s;s/^\s+/\$s/;print&rdquo;>&ldquo;$j.new&rdquo; &amp;&amp; mv &ldquo;$j.new&rdquo; $j; done;find . -name *.pp | grep -v vendor | grep -v tmp | xargs puppet-lint &mdash;fix >/dev/null ||true&rsquo; HEAD</p></blockquote>
+
+<p>This switches my puppet codebase to the canonical 2 space (rather than 4 space) tabs and fixes lint/quoting issues &ndash; all the way back through history.</p>
+
+<p>I, for one, welcome our newold code layout overlords.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Read only bind mounts and docker for unix domain sockets]]></title>

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: docker - t0m's Blog</title>
+  <title>We have always been at war with eastasia - t0m's Blog</title>
   <meta name="author" content="Tomas Doran">
 
   
-  <meta name="description" content="Category: docker">
+  <meta name="description" content="Rewriting history when doing an svn to git migration is always fun. Especially when you start rewriting the entire contents of files. Take this ditty &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://bobtfish.github.ioblog/categories/docker">
+  <link rel="canonical" href="http://bobtfish.github.io/blog/2013/11/06/we-have-always-been-at-war-with-eastasia">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="t0m's Blog" type="application/atom+xml">
@@ -64,35 +64,86 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Docker</h1>
+    
+      <h1 class="entry-title">We Have Always Been at War With Eastasia</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-06T23:12:00+00:00" pubdate data-updated="true">Nov 6<span>th</span>, 2013</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>Rewriting history when doing an svn to git migration is always fun. Especially when you start rewriting the entire contents of files.</p>
 
-  
-  <h2>2013</h2>
+<p>Take this ditty for instance:</p>
 
-<article>
-  
-<h1><a href="/blog/2013/10/06/read-only-bind-mounts-and-docker/">Read only bind mounts and docker for unix domain sockets</a></h1>
-<time datetime="2013-10-06T23:48:00+01:00" pubdate><span class='month'>Oct</span> <span class='day'>06</span> <span class='year'>2013</span></time>
+<blockquote><p>   git filter-branch -f &mdash;tree-filter &lsquo;for j in $(for i in $(find . -name *.pp | grep -v vendor | grep -v tmp); do cat $i |perl -ne&#8221;/(\s+)\S/&amp;&amp;\$e{length(\$1)}++;END {exit 0 if \$e{2}; exit 2}&ldquo;|| echo $i; done); do cat $j | perl -ne&rdquo;/^(\s+)/;\$s=length(\$1)/2;\$s=\&ldquo; &#34;x\$s;s/^\s+/\$s/;print&rdquo;>&ldquo;$j.new&rdquo; &amp;&amp; mv &ldquo;$j.new&rdquo; $j; done;find . -name *.pp | grep -v vendor | grep -v tmp | xargs puppet-lint &mdash;fix >/dev/null ||true&rsquo; HEAD</p></blockquote>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/docker/'>docker</a>, <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/puppet/'>puppet</a></span>
-</footer>
+<p>This switches my puppet codebase to the canonical 2 space (rather than 4 space) tabs and fixes lint/quoting issues &ndash; all the way back through history.</p>
 
-
-</article>
-
+<p>I, for one, welcome our newold code layout overlords.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Tomas Doran</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-06T23:12:00+00:00" pubdate data-updated="true">Nov 6<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://bobtfish.github.io/blog/2013/11/06/we-have-always-been-at-war-with-eastasia/" data-via="bobtfish" data-counturl="http://bobtfish.github.io/blog/2013/11/06/we-have-always-been-at-war-with-eastasia/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/10/06/read-only-bind-mounts-and-docker/" title="Previous Post: Read only bind mounts and docker for unix domain sockets">&laquo; Read only bind mounts and docker for unix domain sockets</a>
+      
+      
+    </p>
+  </footer>
 </article>
 
 </div>
