@@ -2,32 +2,36 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://bobtfish.github.io/blog/2013/07/13/new-blog/</loc>
-        <lastmod>2013-10-07T00:39:46+01:00</lastmod>
+        <lastmod>2013-12-13T17:45:53+00:00</lastmod>
     </url>
     <url>
         <loc>http://bobtfish.github.io/blog/2013/10/05/the-starwars-methodology/</loc>
-        <lastmod>2013-10-07T00:39:46+01:00</lastmod>
+        <lastmod>2013-12-13T17:45:53+00:00</lastmod>
     </url>
     <url>
         <loc>http://bobtfish.github.io/blog/2013/10/06/read-only-bind-mounts-and-docker/</loc>
-        <lastmod>2013-10-07T09:42:38+01:00</lastmod>
+        <lastmod>2013-12-13T17:45:53+00:00</lastmod>
     </url>
     <url>
         <loc>
             http://bobtfish.github.io/blog/2013/11/06/we-have-always-been-at-war-with-eastasia/
         </loc>
-        <lastmod>2013-11-07T01:26:23+00:00</lastmod>
+        <lastmod>2013-12-13T17:45:53+00:00</lastmod>
+    </url>
+    <url>
+        <loc>http://bobtfish.github.io/blog/2014/04/15/me-in_video_form/</loc>
+        <lastmod>2014-04-15T14:03:05+01:00</lastmod>
     </url>
     <url>
         <loc>http://bobtfish.github.io/blog/archives/</loc>
-        <lastmod>2013-11-07T01:26:23+00:00</lastmod>
+        <lastmod>2014-04-15T14:03:05+01:00</lastmod>
     </url>
     <url>
         <loc>http://bobtfish.github.io/</loc>
-        <lastmod>2013-11-07T01:26:23+00:00</lastmod>
+        <lastmod>2014-04-15T14:03:05+01:00</lastmod>
     </url>
     <url>
         <loc>http://bobtfish.github.io/robots.txt</loc>
-        <lastmod>2013-10-07T00:39:46+01:00</lastmod>
+        <lastmod>2013-12-13T17:45:53+00:00</lastmod>
     </url>
 </urlset>

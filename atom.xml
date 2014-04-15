@@ -4,7 +4,7 @@
   <title><![CDATA[t0m's Blog]]></title>
   <link href="http://bobtfish.github.io/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2013-11-07T01:28:08+00:00</updated>
+  <updated>2014-04-15T14:03:32+01:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -12,6 +12,28 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Me, in Video form]]></title>
+    <link href="http://bobtfish.github.io/blog/2014/04/15/me-in_video_form/"/>
+    <updated>2014-04-15T13:38:00+01:00</updated>
+    <id>http://bobtfish.github.io/blog/2014/04/15/me-in_video_form</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been a massive fail at blogging recently, as I&rsquo;ve been way too busy doing cool stuff :)</p>
+
+<p>However, I have talked at a whole bunch of conferences and tech meetups in the last 12 months,
+here&rsquo;s a quick run-down of where&rsquo;s I&rsquo;ve been for posterity:</p>
+
+<ul>
+<li><a href="https://puppetlabs.com/events/puppet-camp-london-0">Puppet camp London 2014</a> &ndash; Chasing AMI &ndash; Building Amazon machine images with Puppet, Packer and Jenkins <a href="http://www.slideshare.net/bobtfish/chasing-ami-puppetcamplondonapr2014">Slides</a></li>
+<li>San Francisco Perl Mongers Tech Meetup May 2014 &ndash; Taking control of chaos with Docker (redux, with additional content) <a href="https://archive.org/details/tomasdorantakingcontrolofchaoswithdocker">Video</a></li>
+<li><a href="http://puppetlabs.com/blog/puppet-camp-silicon-valley">Puppet camp Silicon Valley 2014</a> &ndash; Deploying puppet code at light speed <a href="http://www.slideshare.net/bobtfish/deploying-puppet-code-at-light-speed">Slides</a> <a href="http://www.youtube.com/watch?v=CKdNDEyq1eA">Video</a> <a href="http://www.youtube.com/watch?v=W4Skk5D6drU">Panel session video</a></li>
+<li><a href="http://www.netways.de/puppetcamp/archive_munich_2013/">Puppet camp Munich 2013</a> &ndash; Thinking through puppet code layout <a href="http://www.slideshare.net/bobtfish/code-layout-puppetcampmunich">Slides</a> <a href="http://www.youtube.com/watch?v=aiJ1pmrqR7E">Video</a></li>
+<li>Puppet camp London 2013 &ndash; Taking control of chaos with Docker and Puppet <a href="http://www.slideshare.net/bobtfish/docker-puppetcamp-london-2013">Slides</a> <a href="http://www.youtube.com/watch?v=KSo_mcJxFIA">Video</a></li>
+<li>Puppet conf 2013 &ndash; Test driven infrastructure development <a href="">Slides</a> <a href="http://www.youtube.com/watch?v=S8_a5G1UCdM">Video</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[We have always been at war with eastasia]]></title>
