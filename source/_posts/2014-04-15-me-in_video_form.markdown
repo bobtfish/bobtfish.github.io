@@ -4,6 +4,7 @@ title: "Me, in Video form"
 date: 2014-04-15 13:38
 comments: true
 categories: 
+published: true
 ---
 
 I've been a massive fail at blogging recently, as I've been way too busy doing cool stuff :)
