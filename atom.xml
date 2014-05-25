@@ -4,7 +4,7 @@
   <title><![CDATA[t0m's Blog]]></title>
   <link href="http://bobtfish.github.io/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2014-05-25T15:30:30+01:00</updated>
+  <updated>2014-05-25T15:32:28+01:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -12,51 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Code as config considered harmful]]></title>
-    <link href="http://bobtfish.github.io/blog/2014/04/26/code-as-config-considered-harmful/"/>
-    <updated>2014-04-26T12:34:00+01:00</updated>
-    <id>http://bobtfish.github.io/blog/2014/04/26/code-as-config-considered-harmful</id>
-    <content type="html"><![CDATA[<p>Configuration as code a (or the wider scoped infrastructure as code) is a devops mantra.</p>
-
-<p>I&rsquo;m entirely behind this &ndash; repeated / duplicated configuration is an evil thing
-and taking steps to be able to keep your configs in revision control and template
-repeated sections are extremely helpful.</p>
-
-<p>So what do I mean by &ldquo;code as config&rdquo;?</p>
-
-<p>DSLs! (Domain Specific Languages)</p>
-
-<p>The idea of a DSL is to write something a more &lsquo;natural language&rsquo; than as normal code.</p>
-
-<p>This is also a great idea in a bunch of cases.</p>
-
-<p>However DSLs can be (and are) overused when it&rsquo;s not appropriate.</p>
-
-<p>Picking on one example to cover in depth (I&rsquo;ll illustrate plenty more at the end), I&rsquo;m going
-to pick on Puppetfile.</p>
-
-<p><a href="https://github.com/rodjek/librarian-puppet">https://github.com/rodjek/librarian-puppet</a></p>
-
-<p><a href="https://github.com/adrienthebo/r10k">https://github.com/adrienthebo/r10k</a></p>
-
-<p>Puppetfile is an extremely simple DSL, it could easily just be a YAML or JSON file.</p>
-
-<p>In fact, I think it <em>should</em> be a YAML or JSON file instead.</p>
-
-<p>Anything which wants to read Puppetfile either needs to be written in ruby, and re-implement the DSL
-(and as r10k shows, this is pretty trivial <a href="https://github.com/adrienthebo/r10k/blob/master/lib/r10k/puppetfile.rb#L90">https://github.com/adrienthebo/r10k/blob/master/lib/r10k/puppetfile.rb#L90</a>)
-, or needs to re-implement a subset of ruby enough to read Puppetfile.</p>
-
-<p>This isn&rsquo;t an insurmountable problem, as noted the subset of ruby used is very very simple.</p>
-
-<p>The larger issue comes if you wanted to <em>write</em> that config out again.</p>
-
-<p>I&rsquo;d like to be able to make a Jenkins job which upgrades any modules I&rsquo;m using for newer versions, and then runs the
-tests in my code.</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Me, in Video form]]></title>
