@@ -12,6 +12,15 @@ I've been a massive fail at blogging recently, as I've been way too busy doing c
 However, I have talked at a whole bunch of conferences and tech meetups in the last 12 months,
 here's a quick run-down of where's I've been for posterity:
 
+Updates since the original post
+-------------------------------
+
+  * [Puppetcamp NY](http://puppetlabs.com/events/puppet-camp-nyc) Streamlining your puppet development workflow. [Video](http://www.youtube.com/watch?v=lRmAMqrPd4k) [Slides](http://www.slideshare.net/bobtfish/steamlining-your-puppet-developmentpuppetconfny2014)
+  * [Dockercon 14](http://www.dockercon.com/) - Building a smarter application stack - service discovery and wiring for Docker and traditional deployments. [Video](https://www.youtube.com/watch?v=49_5lwGtkmo) [Slides](http://www.slideshare.net/bobtfish/docker-confjune2014)
+
+Original list
+-------------
+
   * [Puppet camp London 2014](https://puppetlabs.com/events/puppet-camp-london-0) - Chasing AMI - Building Amazon machine images with Puppet, Packer and Jenkins [Video](http://www.youtube.com/watch?v=ZeCoHYwfn3g) [Slides](http://www.slideshare.net/bobtfish/chasing-ami-puppetcamplondonapr2014)
   * San Francisco Perl Mongers Tech Meetup May 2014 - Taking control of chaos with Docker (redux, with additional content) [Video](https://archive.org/details/tomasdorantakingcontrolofchaoswithdocker)
   * [Puppet camp Silicon Valley 2014](http://puppetlabs.com/blog/puppet-camp-silicon-valley) - Deploying puppet code at light speed [Slides](http://www.slideshare.net/bobtfish/deploying-puppet-code-at-light-speed) [Video](http://www.youtube.com/watch?v=CKdNDEyq1eA) [Panel session video](http://www.youtube.com/watch?v=W4Skk5D6drU)
