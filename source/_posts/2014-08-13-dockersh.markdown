@@ -1,0 +1,15 @@
+---
+layout: post
+title: "dockersh"
+date: 2014-08-13 21:49
+comments: true
+categories: 
+published: false
+---
+
+I made a thing! [dockersh](https://github.com/Yelp/dockersh) - A user shell for isolated, containerized environments.
+
+This is my first experiment programming Go, so excuse the terrible code ;_)
+
+There's some more details about the what and why that you should check out over on the [Yelp Engineering blog](http://engineeringblog.yelp.com/2014/08/)
+
