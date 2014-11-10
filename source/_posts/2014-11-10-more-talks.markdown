@@ -4,6 +4,7 @@ title: "More talks"
 date: 2014-11-10 14:01
 comments: true
 categories: 
+published: true
 
 I'm still rubbish at remembeing to (or finding the time to) blog, however here's some more video links:
 
