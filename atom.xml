@@ -4,7 +4,7 @@
   <title><![CDATA[t0m's very occasional blog]]></title>
   <link href="http://bobtfish.github.io/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2014-11-10T14:13:13+00:00</updated>
+  <updated>2015-01-27T09:58:29+00:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -21,7 +21,7 @@
     <content type="html"><![CDATA[<p>I&rsquo;m still rubbish at remembeing to (or finding the time to) blog, however here&rsquo;s some more video links:</p>
 
 <ul>
-<li> <a href="http://www.meetup.com/London-DevOps/events/202106482/">London Devops</a> Streamlining your puppet development workflow. <a href="http://www.youtube.com/watch?v=hwWvfAGkcmg">Video</a> <a href="http://www.slideshare.net/bobtfish/dockersh-and-a-brief-intro-to-the-docker-internals">Slides</a></li>
+<li> <a href="http://www.meetup.com/London-DevOps/events/202106482/">London Devops</a> Dockersh and a guided tour of the Linux kernel facilities docker uses. <a href="http://www.youtube.com/watch?v=hwWvfAGkcmg">Video</a> <a href="http://www.slideshare.net/bobtfish/dockersh-and-a-brief-intro-to-the-docker-internals">Slides</a></li>
 <li> <a href="http://2014.puppetconf.com/">Puppetconf 2014</a> Sensu and Sensibility &ndash; The Story of a Journey From #monitoringsucks to #monitoringlove. <a href="http://www.youtube.com/watch?v=0VfSmITEOHM">Video</a> <a href="http://www.slideshare.net/bobtfish/sensu-and-sensibility-puppetconf-2014">Slides</a></li>
 </ul>
 

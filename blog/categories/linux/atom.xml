@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | t0m's very occasional blog]]></title>
   <link href="http://bobtfish.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2014-11-10T14:13:13+00:00</updated>
+  <updated>2015-01-27T09:58:29+00:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -202,7 +202,7 @@ the second piece of cunning is an upstart script to make sure things as kosher a
 </span><span class='line'><span class="nv">depth</span><span class="o">=</span>0 <span class="nv">C</span> <span class="o">=</span> GB, <span class="nv">ST</span> <span class="o">=</span> Greater London, <span class="nv">L</span> <span class="o">=</span> London, <span class="nv">O</span> <span class="o">=</span> bobtfish.net, <span class="nv">CN</span> <span class="o">=</span> mail.bobtfish.net
 </span><span class='line'>verify <span class="k">return</span>:1
 </span><span class='line'>+OK Dovecot ready.
-</span><span class='line'>USER &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;&amp;#109;&amp;#x61;&amp;#x69;&amp;#108;&amp;#x74;&amp;#111;&amp;#58;&amp;#x62;&amp;#x6f;&amp;#x62;&amp;#x74;&amp;#x66;&amp;#x69;&amp;#x73;&amp;#x68;&amp;#64;&amp;#98;&amp;#111;&amp;#98;&amp;#116;&amp;#102;&amp;#105;&amp;#x73;&amp;#104;&amp;#46;&amp;#x6e;&amp;#101;&amp;#x74;&quot;</span>&gt;&amp;#98;&amp;#x6f;&amp;#98;&amp;#116;&amp;#102;&amp;#x69;&amp;#115;&amp;#x68;&amp;#64;&amp;#x62;&amp;#111;&amp;#x62;&amp;#116;&amp;#x66;&amp;#105;&amp;#115;&amp;#104;&amp;#46;&amp;#110;&amp;#101;&amp;#116;&lt;/a&gt;
+</span><span class='line'>USER &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;&amp;#x6d;&amp;#97;&amp;#105;&amp;#x6c;&amp;#x74;&amp;#111;&amp;#x3a;&amp;#98;&amp;#x6f;&amp;#98;&amp;#x74;&amp;#102;&amp;#x69;&amp;#x73;&amp;#x68;&amp;#64;&amp;#98;&amp;#111;&amp;#x62;&amp;#116;&amp;#x66;&amp;#105;&amp;#115;&amp;#x68;&amp;#x2e;&amp;#110;&amp;#101;&amp;#x74;&quot;</span>&gt;&amp;#x62;&amp;#111;&amp;#x62;&amp;#116;&amp;#102;&amp;#x69;&amp;#x73;&amp;#104;&amp;#64;&amp;#x62;&amp;#111;&amp;#x62;&amp;#x74;&amp;#x66;&amp;#x69;&amp;#115;&amp;#104;&amp;#x2e;&amp;#110;&amp;#x65;&amp;#x74;&lt;/a&gt;
 </span><span class='line'>+OK
 </span><span class='line'>PASS xxxxxx
 </span><span class='line'>+OK Logged in.
