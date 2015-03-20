@@ -22,7 +22,7 @@ Given a basic model of OO languages, it's easily possible to infer what's
 going on (or what may be going on) most of the time given basic observations
 and a few print statements, or even a file and line number.
 
-Getting a full backtrace out of [most][https://metacpan.org/module/JJORE/App-Stacktrace-0.09/bin/perl-stacktrace] [dynamic][http://isotope11.com/blog/getting-a-ruby-backtrace-from-gnu-debugger] [languages][https://wiki.python.org/moin/DebuggingWithGdb] is real easy too, even in extreme cases..
+Getting a full backtrace out of [most](https://metacpan.org/module/JJORE/App-Stacktrace-0.09/bin/perl-stacktrace) [dynamic](http://isotope11.com/blog/getting-a-ruby-backtrace-from-gnu-debugger) [languages](https://wiki.python.org/moin/DebuggingWithGdb) is real easy too, even in extreme cases..
 
 Even if you don't know for sure, some source diving will at least
 help give you more concrete ideas about how the code is built, which
