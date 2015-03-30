@@ -1,0 +1,592 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Terraform from the ground up - t0m's very occasional blog</title>
+  <meta name="author" content="Tomas Doran">
+
+  
+  <meta name="description" content="I&rsquo;ve been playing around with Terraform a bunch recently, and I&rsquo;m pretty excited about 0.4.0. However at the moment, the examples leave &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://bobtfish.github.io/blog/2015/03/29/terraform-from-the-ground-up">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="t0m's very occasional blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">t0m's very occasional blog</a></h1>
+  
+    <h2>Sufficiently advanced trolling is indistinguishable from thought leadership</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:bobtfish.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Terraform From the Ground Up</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-29T21:18:00+01:00" pubdate data-updated="true">Mar 29<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&rsquo;ve been playing around with Terraform a bunch recently, and I&rsquo;m pretty <a href="https://twitter.com/bobtfish/status/581905067948797952">excited</a> about <a href="https://github.com/hashicorp/terraform/blob/master/CHANGELOG.md#040-unreleased">0.4.0</a>.</p>
+
+<p>However at the moment, the examples leave quite a lot to be desired. So for my own learning and entertainment, I&rsquo;ve created a set of example terraform modules,
+and a simple example that you should be able to clone and run.</p>
+
+<!-- more -->
+
+
+<h2>What&rsquo;s exciting in terraform</h2>
+
+<p>One of the <a href="https://github.com/hashicorp/terraform/pull/1319">pull requests</a> <a href="https://github.com/hashicorp/terraform/pull/1080">I&rsquo;ve been watching</a> <a href="around%20ASGs">https://github.com/hashicorp/terraform/pull/1076</a> / etc were merged recently, <a href="https://github.com/hashicorp/terraform/issues/932">fixing Tags on ASGs</a> which I use at work for the <a href="https://docs.puppetlabs.com/guides/external_nodes.html">puppet ENC</a>, and the <a href="https://github.com/hashicorp/terraform/pull/1049">support for ~/.aws/credentials</a> files is almost ready.</p>
+
+<p>In fact, after chatting with folks at <a href="http://www.scalesummit.org/">scalesummit</a> on Friday, I was so excited that I wanted to pull some of the new features into
+<a href="https://github.com/bobtfish/terraform">my fork</a> and play with them.</p>
+
+<p>One of the most exciting strategic features to me is what&rsquo;s been called &lsquo;<a href="https://github.com/hashicorp/terraform/pull/1185">remote modules</a>&rsquo;,
+which when it&rsquo;s merged will allow you to consume external terraform state (in a read-only way) from other terraform repositories.</p>
+
+<p>This is <em>almost exactly</em> one of the features I&rsquo;d sketched out as something terraform needed to allow it to scale as a tool for larger organisations.</p>
+
+<p>At my day job, we have multiple teams managing different parts of the infrastructure &ndash; for example one team is responsible for VPCs
+and DNS/puppet masters etc, whilst another team is responsible for kafka/zookeeper clusters, and several other teams all having
+independently managed Elasticsearch clusters.</p>
+
+<p>Ergo the ability to &lsquo;publish&rsquo; terraform state between teams and thus allowing different teams to share the basics like VPCs and subnets)
+whilst having their own configs is essential for the variety of workflows and machine lifecycles that I need to support.</p>
+
+<p>I haven&rsquo;t yet tested out this functionality, as I <a href="http://www.globalnerdy.com/wordpress/wp-content/uploads/2012/09/yak-shaving.jpg">got distracted</a>
+making some example &lsquo;base infrastructure&rsquo; modules that I wanted to consume data from.</p>
+
+<h2>Unreleased software note!</h2>
+
+<p>You need to use <a href="https://github.com/bobtfish/terraform">my fork</a> of terraform for the examples below to work,
+but I expect them to work without any significant changes in 0.4.0</p>
+
+<h2>Terraform modules</h2>
+
+<p>I&rsquo;ve scratched my head about how to do terraform modules (which need to lookup external data that&rsquo;s not in terraform) for a while, and I&rsquo;ve come up with a pattern that I don&rsquo;t hate.</p>
+
+<p>I&rsquo;ve also written some public modules that are on github, which you can look at and criticise. (Sorry in advance for the terrible ruby)</p>
+
+<p>Whilst I haven&rsquo;t yet used the feature I merged, the state from the example in this post is a semi-realistic example VPC
+that I&rsquo;ll be able to use for further testing.</p>
+
+<p>To give you some insight into how I&rsquo;ve put things together, I&rsquo;m going to dive into
+each of the modules and explain a little about them, before
+showing how I wrap them up together with the actual code/config to launch a VPC.</p>
+
+<h3>Looking up AMIs</h3>
+
+<p>Lets think about how we should lookup a Ubuntu AMI using <a href="https://github.com/bobtfish/terraform-ubuntu-ami">a terraform module</a>.</p>
+
+<p>There&rsquo;s <a href="http://cloud-images.ubuntu.com/locator/ec2">a giant table</a> of AMIs available on the web, and the data for it is <a href="http://cloud-images.ubuntu.com/locator/ec2/releasesTable">almost</a>, <a href="https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/getvariables.rb#L11">but not quite</a> JSON you can parse.</p>
+
+<p>So I wrote a getvariables.rb script, a <a href="https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/Makefile">Makefile</a> which generates <a href="https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/variables.tf.json">variables.tf.json</a> &ndash; end result, we have a giant hash table of all the AMIs for Ubuntu in all of the regions.</p>
+
+<p>We can then use a combination of variables and the <a href="https://github.com/bobtfish/terraform/blob/master/website/source/docs/configuration/interpolation.html.md#user-content-built-in-functions">lookup + format functions</a> in <a href="https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/main.tf">the main.tf</a> to output the desired AMI.</p>
+
+<p>Then we just use the module, supplying it the params it needs, and we get the right AMI.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>module "ami" {
+</span><span class='line'>  source = "github.com/bobtfish/terraform-ubuntu-ami"
+</span><span class='line'>  region = "eu-central-1"
+</span><span class='line'>  distribution = "trusty"
+</span><span class='line'>  architecture = "amd64"
+</span><span class='line'>  virttype = "hvm"
+</span><span class='line'>  storagetype = "instance-store"
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>resource "aws_instance" "web" {
+</span><span class='line'>  ami = "${module.ami.ami_id}"
+</span><span class='line'>  instance_type = "m3.8xlarge"
+</span><span class='line'>  ...
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>What availability zones?</h3>
+
+<p>Next example &ndash; in AWS, which availability zones you&rsquo;re given access to depends on your account.</p>
+
+<p>Therefore, to provide a generic template that anyone can use to launch a VPC (in any region), we need to be able
+to detect which regions and availability zones a user has access to.</p>
+
+<p>Using almost the same pattern, and <a href="http://aws.amazon.com/cli/">the aws cli tool</a>, I&rsquo;ve produced another module
+which will read your <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files">~/.aws/credentials file</a> to
+pull in a list of all your available availability zones.</p>
+
+<p>Due to the way terraform currently handles things, <a href="https://github.com/bobtfish/terraform-azs">this module</a> just exports three variables, a primary, secondary, and (where available)
+tertiary availability zone (ordered by alphabetical sort).</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>module "az" {
+</span><span class='line'>  source = "github.com/bobtfish/terraform-azs"
+</span><span class='line'>  region = "eu-central-1"
+</span><span class='line'>  account = "demo"
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>resource "aws_subnet" "primary-front" {
+</span><span class='line'>  availability_zone = "${module.az.primary}"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that for this to work, you will need a <em>[demo]</em> section in your ~/.aws/credentials file, as the variables.tf.json file
+is <em>not</em> committed to the repository, unlike the last example.</p>
+
+<h3>Lets build some damn infrastructure already!</h3>
+
+<p>We&rsquo;ve now got the pieces we need to put together a VPC, so lets go ahead and <a href="https://github.com/bobtfish/terraform-vpc">write a module to do that</a>.</p>
+
+<p>This takes a /16 network and builds out a VPC with public (internet IP), private (fixed address) and ephemeral (ASG/ELB) subnets
+in two availability zones.</p>
+
+<p>Note that we have <em>a lot</em> <a href="https://github.com/bobtfish/terraform-vpc/blob/master/outputs.tf">of outputs here</a>, as we need to expose
+every piece of infastructure we want to be able to reference to the module&rsquo;s users.</p>
+
+<h3>But I meant an actual machine!</h3>
+
+<p>That&rsquo;s the next step, we want to launch <a href="https://github.com/bobtfish/terraform-vpc-nat/blob/master/main.tf#L47">our first NAT machine</a>, and again, we&rsquo;ll <a href="https://github.com/bobtfish/terraform-vpc-nat">write a module for it</a>!</p>
+
+<p>We use <a href="https://help.ubuntu.com/community/CloudInit#Cloud_Config_Syntax">cloud-config</a> to setup a firewall on the initial machine, so that subsequent
+machines (without public IP addresses) can NAT externally, and we reset the main routing table (used by the &lsquo;back&rsquo; and &lsquo;ephemeral&rsquo; subnets created
+by the VPC module) to be one which points to the new NAT instance. For <a href="https://pbs.twimg.com/media/CBHd3OVUwAA8FBh.png:large">good measure</a> we also install <a href="https://www.docker.com/">Docker</a> and <a href="https://puppetlabs.com/">puppet</a>.</p>
+
+<p>Note that we have to use the remote_exec provisioner here to wait for cloud-init to finish, so that we know the firewall rules are in place
+for NAT before we launch any more machines</p>
+
+<h2>So when do we get to do something I can actually run?</h2>
+
+<p>Ok, lets put the VPC + nat machine module to work, and <a href="https://github.com/bobtfish/terraform-example-vpc/blob/master/eucentral1-demo/internal.tf">build a host inside the private
+subnets</a>.</p>
+
+<p>You can (and should!) fork and clone <a href="https://github.com/bobtfish/terraform-example-vpc">this example</a>, which contains
+just enough stuff to string the modules we&rsquo;ve written together and bring up a couple of hosts.</p>
+
+<p>You&rsquo;ll need:</p>
+
+<ul>
+<li><a href="https://github.com/bobtfish/terraform">my fork</a> of terraform</li>
+<li><a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files">An ~/.aws/credentials file</a> with a <em>[demo]</em> section</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>~ ⭐ git clone git@github.com:bobtfish/terraform-example-vpc.git
+</span><span class='line'>Cloning into 'terraform-example-vpc'...
+</span><span class='line'>remote: Counting objects: 61, done.
+</span><span class='line'>remote: Compressing objects: 100% (34/34), done.
+</span><span class='line'>remote: Total 61 (delta 27), reused 54 (delta 20), pack-reused 0
+</span><span class='line'>Receiving objects: 100% (61/61), 15.01 KiB | 0 bytes/s, done.
+</span><span class='line'>Resolving deltas: 100% (27/27), done.
+</span><span class='line'>Checking connectivity... done.
+</span><span class='line'>~ ⭐ cd terraform-example-vpc/
+</span><span class='line'>terraform-example-vpc (master👆 ✔) ⭐ make
+</span><span class='line'>ssh-keygen -t rsa -f id_rsa -N ''
+</span><span class='line'>Generating public/private rsa key pair.
+</span><span class='line'>Your identification has been saved in id_rsa.
+</span><span class='line'>Your public key has been saved in id_rsa.pub.
+</span><span class='line'>The key fingerprint is:3d:c8:0c:76:1e:29:25:a2:52:cd:7d:09:9b:53:24:c9 t0m@somebox
+</span><span class='line'>The key's randomart image is:
+</span><span class='line'>+--[ RSA 2048]----+
+</span><span class='line'>|  .+.o+o+.       |
+</span><span class='line'>| . .E..Bo.       |
+</span><span class='line'>|. .   B.+        |
+</span><span class='line'>| .   . O +       |
+</span><span class='line'>|        S o      |
+</span><span class='line'>|           o     |
+</span><span class='line'>|                 |
+</span><span class='line'>|                 |
+</span><span class='line'>|                 |
+</span><span class='line'>+-----------------+
+</span><span class='line'>true
+</span><span class='line'>terraform-example-vpc (master👆 ✔) ⭐</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This has setup an ssh key to allow you to log into the created instances.</p>
+
+<p>Now, change directory into the region+account folder (<a href="https://github.com/hashicorp/terraform/pull/1281">terraform can only do one region at once currently</a>),
+and run make again. This pulls in all the necessary terraform modules (using terraform get), and then runs their Makefiles by iterating over .terraform/modules to ensure that <em>variables.tf.json</em> is built it needed.</p>
+
+<p>Note that even modules which don&rsquo;t need to build <em>variables.tf.json</em> are required to have a Makefile (which can do nothing).</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>eucentral1-demo (master👆 ✔) ⭐ make
+</span><span class='line'>terraform get
+</span><span class='line'>Get: git::https://github.com/bobtfish/terraform-ubuntu-ami.git
+</span><span class='line'>Get: git::https://github.com/bobtfish/terraform-vpc-nat.git
+</span><span class='line'>Get: git::https://github.com/bobtfish/terraform-vpc.git
+</span><span class='line'>Get: git::https://github.com/bobtfish/terraform-ubuntu-ami.git
+</span><span class='line'>Get: git::https://github.com/bobtfish/terraform-azs.git
+</span><span class='line'>for i in $(ls .terraform/modules/); do make -C ".terraform/modules/$i"; done
+</span><span class='line'>make[1]: Entering directory `/home/t0m/terraform-example-vpc/eucentral1-demo/.terraform/modules/1b2917ba643e4bf90b900b6da59b2e05'
+</span><span class='line'>ruby getvariables.rb
+</span><span class='line'>make[1]: Leaving directory `/home/t0m/terraform-example-vpc/eucentral1-demo/.terraform/modules/1b2917ba643e4bf90b900b6da59b2e05'
+</span><span class='line'>make[1]: Entering directory `/home/t0m/terraform-example-vpc/eucentral1-demo/.terraform/modules/3f6892e390615d3c9f3cc69d65d7291c'
+</span><span class='line'>true
+</span><span class='line'>make[1]: Leaving directory `/home/t0m/terraform-example-vpc/eucentral1-demo/.terraform/modules/3f6892e390615d3c9f3cc69d65d7291c'
+</span><span class='line'>make[1]: Entering directory `/home/t0m/terraform-example-vpc/eucentral1-demo/.terraform/modules/be339b8825e57c8cb0372c530eaf49bf'
+</span><span class='line'>true
+</span><span class='line'>make[1]: Leaving directory `/home/t0m/terraform-example-vpc/eucentral1-demo/.terraform/modules/be339b8825e57c8cb0372c530eaf49bf'
+</span><span class='line'>make[1]: Entering directory `/home/t0m/terraform-example-vpc/eucentral1-demo/.terraform/modules/d4386a9079b869044647990c72b8f0e4'
+</span><span class='line'>make[1]: Nothing to be done for `all'.
+</span><span class='line'>make[1]: Leaving directory `/home/t0m/terraform-example-vpc/eucentral1-demo/.terraform/modules/d4386a9079b869044647990c72b8f0e4'
+</span><span class='line'>ruby getvariables.rb &gt; variables.tf.json
+</span><span class='line'>eucentral1-demo (master👆 ✔) ⭐ terraform apply
+</span><span class='line'>aws_key_pair.deployer: Creating...
+</span><span class='line'>
+</span><span class='line'>... loads more stuff deleted ...
+</span><span class='line'>
+</span><span class='line'>Outputs:
+</span><span class='line'>
+</span><span class='line'>  nat-public-ip = 52.28.22.233</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You should be able to ssh to your nat instance:</p>
+
+<pre><code>ssh-add ../id_rsa
+make sshnat
+</code></pre>
+
+<p>and from there, ssh into your back network host:</p>
+
+<pre><code>ssh 10.1.1.4
+</code></pre>
+
+<p>and you should see <a href="https://www.consul.io/">consul</a> running (in Docker <a href="https://pbs.twimg.com/media/CBHd3OVUwAA8FBh.png:large">of course</a>)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ubuntu@ip-10-1-1-4:~$ ping -c 2 8.8.8.8
+</span><span class='line'>PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+</span><span class='line'>64 bytes from 8.8.8.8: icmp_seq=1 ttl=56 time=6.74 ms
+</span><span class='line'>64 bytes from 8.8.8.8: icmp_seq=2 ttl=56 time=6.96 ms
+</span><span class='line'>
+</span><span class='line'>--- 8.8.8.8 ping statistics ---
+</span><span class='line'>2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+</span><span class='line'>rtt min/avg/max/mdev = 6.746/6.856/6.966/0.110 ms
+</span><span class='line'>ubuntu@ip-10-1-1-4:~$ sudo docker ps
+</span><span class='line'>CONTAINER ID        IMAGE                  COMMAND                CREATED             STATUS              PORTS                                                      NAMES
+</span><span class='line'>d63b2034bf80        fhalim/consul:latest   "/bin/sh -c '/usr/lo   6 seconds ago       Up 6 seconds        8400/tcp, 0.0.0.0:8500-&gt;8500/tcp, 0.0.0.0:8600-&gt;8600/udp   consul</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Reusing</h2>
+
+<p>As most of the logic is in modules, to create another VPC in another environment or account, the top level directory can just be copied,
+the terraform.tfstate file removed and the details in <em>terraform.tfvars</em> updated.</p>
+
+<h2>Conclusion</h2>
+
+<p>Whilst a bunch of stuff in the current demo is more simplistic than a real infrastructure, it shows that terraform can be used to
+bootstrap entire VPCs with non-trivial configurations.</p>
+
+<p>I haven&rsquo;t (yet) installed anything &lsquo;real&rsquo; other than a docker container and some iptables rules as cloud-init is a terrible
+config management mechanism! However the current example should be useful as a platform for jumping off from, either
+on top of pre-existing infrastructre and puppet masters/chef servers (add vpc peering or vpns), or with ssh based config management
+(ansible, salt).</p>
+
+<h2>What&rsquo;s next?</h2>
+
+<p>In the next post (or rather, in my next set of hacking that I may or may not write up ;), I plan to use the infrastructure details of this subnet to test out
+the remote module feaure, try to get a puppetmaster (with EC2 tags as the ENC) up, and explore storing the terraform state in <a href="https://www.consul.io/">consul</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Tomas Doran</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-29T21:18:00+01:00" pubdate data-updated="true">Mar 29<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/aws/'>aws,</a>, <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/terraform/'>terraform,</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://bobtfish.github.io/blog/2015/03/29/terraform-from-the-ground-up/" data-via="bobtfish" data-counturl="http://bobtfish.github.io/blog/2015/03/29/terraform-from-the-ground-up/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/11/10/more-talks/" title="Previous Post: More talks">&laquo; More talks</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/03/29/terraform-from-the-ground-up/">Terraform From the Ground Up</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/10/more-talks/">More Talks</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/15/me-in_video_form/">Me, in Video Form</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/06/we-have-always-been-at-war-with-eastasia/">We Have Always Been at War With Eastasia</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/06/read-only-bind-mounts-and-docker/">Read Only Bind Mounts and Docker for Unix Domain Sockets</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/bobtfish">@bobtfish</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'bobtfish',
+            count: 10,
+            skip_forks: false,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Tomas Doran -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
