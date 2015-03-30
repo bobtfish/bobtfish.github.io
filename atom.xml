@@ -4,7 +4,7 @@
   <title><![CDATA[t0m's very occasional blog]]></title>
   <link href="http://bobtfish.github.io/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2015-03-30T01:11:47+01:00</updated>
+  <updated>2015-03-30T01:34:57+01:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -18,15 +18,15 @@
     <link href="http://bobtfish.github.io/blog/2015/03/29/terraform-from-the-ground-up/"/>
     <updated>2015-03-29T21:18:00+01:00</updated>
     <id>http://bobtfish.github.io/blog/2015/03/29/terraform-from-the-ground-up</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve been playing around with Terraform a bunch recently, and I&rsquo;m pretty <a href="https://twitter.com/bobtfish/status/581905067948797952">excited</a> about <a href="https://github.com/hashicorp/terraform/blob/master/CHANGELOG.md#040-unreleased">0.4.0</a>.</p>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been playing around with <a href="https://www.terraform.io/">Terraform</a> a bunch recently, and I&rsquo;m pretty <a href="https://twitter.com/bobtfish/status/581905067948797952">excited</a> about <a href="https://github.com/hashicorp/terraform/blob/master/CHANGELOG.md#040-unreleased">0.4.0</a>.</p>
 
-<p>However at the moment, the examples leave quite a lot to be desired. So for my own learning and entertainment, I&rsquo;ve created a set of example terraform modules,
+<p>However at the moment, the examples leave quite a lot to be desired. So for my own learning and entertainment, I&rsquo;ve created a set of example Terraform modules,
 and a simple example that you should be able to clone and run.</p>
 
 <!-- more -->
 
 
-<h2>What&rsquo;s exciting in terraform</h2>
+<h2>What&rsquo;s exciting in Terraform</h2>
 
 <p>One of the <a href="https://github.com/hashicorp/terraform/pull/1319">pull requests</a> <a href="https://github.com/hashicorp/terraform/pull/1080">I&rsquo;ve been watching</a> <a href="around%20ASGs">https://github.com/hashicorp/terraform/pull/1076</a> / etc were merged recently, <a href="https://github.com/hashicorp/terraform/issues/932">fixing Tags on ASGs</a> which I use at work for the <a href="https://docs.puppetlabs.com/guides/external_nodes.html">puppet ENC</a>, and the <a href="https://github.com/hashicorp/terraform/pull/1049">support for ~/.aws/credentials</a> files is almost ready.</p>
 
@@ -34,15 +34,15 @@ and a simple example that you should be able to clone and run.</p>
 <a href="https://github.com/bobtfish/terraform">my fork</a> and play with them.</p>
 
 <p>One of the most exciting strategic features to me is what&rsquo;s been called &lsquo;<a href="https://github.com/hashicorp/terraform/pull/1185">remote modules</a>&rsquo;,
-which when it&rsquo;s merged will allow you to consume external terraform state (in a read-only way) from other terraform repositories.</p>
+which when it&rsquo;s merged will allow you to consume external Terraform state (in a read-only way) from other Terraform repositories.</p>
 
-<p>This is <em>almost exactly</em> one of the features I&rsquo;d sketched out as something terraform needed to allow it to scale as a tool for larger organisations.</p>
+<p>This is <em>almost exactly</em> one of the features I&rsquo;d sketched out as something Terraform needed to allow it to scale as a tool for larger organisations.</p>
 
 <p>At my day job, we have multiple teams managing different parts of the infrastructure &ndash; for example one team is responsible for VPCs
 and DNS/puppet masters etc, whilst another team is responsible for kafka/zookeeper clusters, and several other teams all having
 independently managed Elasticsearch clusters.</p>
 
-<p>Ergo the ability to &lsquo;publish&rsquo; terraform state between teams and thus allowing different teams to share the basics like VPCs and subnets)
+<p>Ergo the ability to &lsquo;publish&rsquo; state between teams and thus allowing different teams to share the basics like VPCs and subnets)
 whilst having their own configs is essential for the variety of workflows and machine lifecycles that I need to support.</p>
 
 <p>I haven&rsquo;t yet tested out this functionality, as I <a href="http://www.globalnerdy.com/wordpress/wp-content/uploads/2012/09/yak-shaving.jpg">got distracted</a>
@@ -50,12 +50,12 @@ making some example &lsquo;base infrastructure&rsquo; modules that I wanted to c
 
 <h2>Unreleased software note!</h2>
 
-<p>You need to use <a href="https://github.com/bobtfish/terraform">my fork</a> of terraform for the examples below to work,
+<p>You need to use <a href="https://github.com/bobtfish/terraform">my fork</a> of Terraform for the examples below to work,
 but I expect them to work without any significant changes in 0.4.0</p>
 
 <h2>Terraform modules</h2>
 
-<p>I&rsquo;ve scratched my head about how to do terraform modules (which need to lookup external data that&rsquo;s not in terraform) for a while, and I&rsquo;ve come up with a pattern that I don&rsquo;t hate.</p>
+<p>I&rsquo;ve scratched my head about how to do Terraform modules (which need to lookup external data) for a while, and I&rsquo;ve come up with a pattern that I don&rsquo;t hate.</p>
 
 <p>I&rsquo;ve also written some public modules that are on github, which you can look at and criticise. (Sorry in advance for the terrible ruby)</p>
 
@@ -68,7 +68,7 @@ showing how I wrap them up together with the actual code/config to launch a VPC.
 
 <h3>Looking up AMIs</h3>
 
-<p>Lets think about how we should lookup a Ubuntu AMI using <a href="https://github.com/bobtfish/terraform-ubuntu-ami">a terraform module</a>.</p>
+<p>Lets think about how we should lookup a Ubuntu AMI using <a href="https://github.com/bobtfish/terraform-ubuntu-ami">a module</a>.</p>
 
 <p>There&rsquo;s <a href="http://cloud-images.ubuntu.com/locator/ec2">a giant table</a> of AMIs available on the web, and the data for it is <a href="http://cloud-images.ubuntu.com/locator/ec2/releasesTable">almost</a>, <a href="https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/getvariables.rb#L11">but not quite</a> JSON you can parse.</p>
 
@@ -119,7 +119,7 @@ to detect which regions and availability zones a user has access to.</p>
 which will read your <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files">~/.aws/credentials file</a> to
 pull in a list of all your available availability zones.</p>
 
-<p>Due to the way terraform currently handles things, <a href="https://github.com/bobtfish/terraform-azs">this module</a> just exports three variables, a primary, secondary, and (where available)
+<p>Due to the way Terraform currently handles things, <a href="https://github.com/bobtfish/terraform-azs">this module</a> just exports three variables, a primary, secondary, and (where available)
 tertiary availability zone (ordered by alphabetical sort).</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -177,7 +177,7 @@ just enough stuff to string the modules we&rsquo;ve written together and bring u
 <p>You&rsquo;ll need:</p>
 
 <ul>
-<li><a href="https://github.com/bobtfish/terraform">my fork</a> of terraform</li>
+<li><a href="https://github.com/bobtfish/terraform">my fork</a> of Terraform</li>
 <li><a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files">An ~/.aws/credentials file</a> with a <em>[demo]</em> section</li>
 </ul>
 
@@ -244,8 +244,8 @@ just enough stuff to string the modules we&rsquo;ve written together and bring u
 
 <p>This has setup an ssh key to allow you to log into the created instances.</p>
 
-<p>Now, change directory into the region+account folder (<a href="https://github.com/hashicorp/terraform/pull/1281">terraform can only do one region at once currently</a>),
-and run make again. This pulls in all the necessary terraform modules (using terraform get), and then runs their Makefiles by iterating over .terraform/modules to ensure that <em>variables.tf.json</em> is built it needed.</p>
+<p>Now, change directory into the region+account folder (<a href="https://github.com/hashicorp/terraform/pull/1281">Terraform can only do one region at once currently</a>),
+and run make again. This pulls in all the necessary modules (using terraform get), and then runs their Makefiles by iterating over .terraform/modules to ensure that <em>variables.tf.json</em> is built it needed.</p>
 
 <p>Note that even modules which don&rsquo;t need to build <em>variables.tf.json</em> are required to have a Makefile (which can do nothing).</p>
 
@@ -353,7 +353,7 @@ the terraform.tfstate file removed and the details in <em>terraform.tfvars</em> 
 
 <h2>Conclusion</h2>
 
-<p>Whilst a bunch of stuff in the current demo is more simplistic than a real infrastructure, it shows that terraform can be used to
+<p>Whilst a bunch of stuff in the current demo is more simplistic than a real infrastructure, it shows that Terraform can be used to
 bootstrap entire VPCs with non-trivial configurations.</p>
 
 <p>I haven&rsquo;t (yet) installed anything &lsquo;real&rsquo; other than a docker container and some iptables rules as cloud-init is a terrible
@@ -364,7 +364,7 @@ on top of pre-existing infrastructre and puppet masters/chef servers (add vpc pe
 <h2>What&rsquo;s next?</h2>
 
 <p>In the next post (or rather, in my next set of hacking that I may or may not write up ;), I plan to use the infrastructure details of this subnet to test out
-the remote module feaure, try to get a puppetmaster (with EC2 tags as the ENC) up, and explore storing the terraform state in <a href="https://www.consul.io/">consul</a>.</p>
+the remote module feaure, try to get a puppetmaster (with EC2 tags as the ENC) up, and explore storing the state in <a href="https://www.consul.io/">consul</a>.</p>
 ]]></content>
   </entry>
   
