@@ -4,7 +4,7 @@
   <title><![CDATA[Category: aws, | t0m's very occasional blog]]></title>
   <link href="http://bobtfish.github.io/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2015-03-30T01:34:57+01:00</updated>
+  <updated>2015-03-30T01:36:10+01:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -160,6 +160,8 @@ just enough stuff to string the modules we&rsquo;ve written together and bring u
 <li><a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files">An ~/.aws/credentials file</a> with a <em>[demo]</em> section</li>
 </ul>
 
+
+<p>Lets go:</p>
 
 <p><code>
 ~ ⭐ git clone git@github.com:bobtfish/terraform-example-vpc.git

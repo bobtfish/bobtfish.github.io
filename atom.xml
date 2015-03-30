@@ -4,7 +4,7 @@
   <title><![CDATA[t0m's very occasional blog]]></title>
   <link href="http://bobtfish.github.io/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2015-03-30T01:34:57+01:00</updated>
+  <updated>2015-03-30T01:36:10+01:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -181,6 +181,8 @@ just enough stuff to string the modules we&rsquo;ve written together and bring u
 <li><a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files">An ~/.aws/credentials file</a> with a <em>[demo]</em> section</li>
 </ul>
 
+
+<p>Lets go:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
