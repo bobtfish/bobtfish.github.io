@@ -145,6 +145,8 @@ You'll need:
   * [my fork](https://github.com/bobtfish/terraform) of Terraform
   * [An ~/.aws/credentials file](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files) with a _[demo]_ section
 
+Lets go:
+
 ```
 ~ ⭐ git clone git@github.com:bobtfish/terraform-example-vpc.git
 Cloning into 'terraform-example-vpc'...
