@@ -6,14 +6,14 @@ comments: true
 categories: terraform, aws, devops
 ---
 
-I've been playing around with Terraform a bunch recently, and I'm pretty [excited](https://twitter.com/bobtfish/status/581905067948797952) about [0.4.0](https://github.com/hashicorp/terraform/blob/master/CHANGELOG.md#040-unreleased).
+I've been playing around with [Terraform](https://www.terraform.io/) a bunch recently, and I'm pretty [excited](https://twitter.com/bobtfish/status/581905067948797952) about [0.4.0](https://github.com/hashicorp/terraform/blob/master/CHANGELOG.md#040-unreleased).
 
-However at the moment, the examples leave quite a lot to be desired. So for my own learning and entertainment, I've created a set of example terraform modules,
+However at the moment, the examples leave quite a lot to be desired. So for my own learning and entertainment, I've created a set of example Terraform modules,
 and a simple example that you should be able to clone and run.
 
 <!-- more -->
 
-## What's exciting in terraform
+## What's exciting in Terraform
 
 One of the [pull requests](https://github.com/hashicorp/terraform/pull/1319) [I've been watching](https://github.com/hashicorp/terraform/pull/1080) [https://github.com/hashicorp/terraform/pull/1076](around ASGs) / etc were merged recently, [fixing Tags on ASGs](https://github.com/hashicorp/terraform/issues/932) which I use at work for the [puppet ENC](https://docs.puppetlabs.com/guides/external_nodes.html), and the [support for ~/.aws/credentials](https://github.com/hashicorp/terraform/pull/1049) files is almost ready.
 
@@ -21,15 +21,15 @@ In fact, after chatting with folks at [scalesummit](http://www.scalesummit.org/)
 [my fork](https://github.com/bobtfish/terraform) and play with them.
 
 One of the most exciting strategic features to me is what's been called '[remote modules](https://github.com/hashicorp/terraform/pull/1185)',
-which when it's merged will allow you to consume external terraform state (in a read-only way) from other terraform repositories.
+which when it's merged will allow you to consume external Terraform state (in a read-only way) from other Terraform repositories.
 
-This is *almost exactly* one of the features I'd sketched out as something terraform needed to allow it to scale as a tool for larger organisations.
+This is *almost exactly* one of the features I'd sketched out as something Terraform needed to allow it to scale as a tool for larger organisations.
 
 At my day job, we have multiple teams managing different parts of the infrastructure - for example one team is responsible for VPCs
 and DNS/puppet masters etc, whilst another team is responsible for kafka/zookeeper clusters, and several other teams all having
 independently managed Elasticsearch clusters.
 
-Ergo the ability to 'publish' terraform state between teams and thus allowing different teams to share the basics like VPCs and subnets)
+Ergo the ability to 'publish' state between teams and thus allowing different teams to share the basics like VPCs and subnets)
 whilst having their own configs is essential for the variety of workflows and machine lifecycles that I need to support.
 
 I haven't yet tested out this functionality, as I [got distracted](http://www.globalnerdy.com/wordpress/wp-content/uploads/2012/09/yak-shaving.jpg)
@@ -37,12 +37,12 @@ making some example 'base infrastructure' modules that I wanted to consume data 
 
 ## Unreleased software note!
 
-You need to use [my fork](https://github.com/bobtfish/terraform) of terraform for the examples below to work,
+You need to use [my fork](https://github.com/bobtfish/terraform) of Terraform for the examples below to work,
 but I expect them to work without any significant changes in 0.4.0
 
 ## Terraform modules
 
-I've scratched my head about how to do terraform modules (which need to lookup external data that's not in terraform) for a while, and I've come up with a pattern that I don't hate.
+I've scratched my head about how to do Terraform modules (which need to lookup external data) for a while, and I've come up with a pattern that I don't hate.
 
 I've also written some public modules that are on github, which you can look at and criticise. (Sorry in advance for the terrible ruby)
 
@@ -55,7 +55,7 @@ showing how I wrap them up together with the actual code/config to launch a VPC.
 
 ### Looking up AMIs
 
-Lets think about how we should lookup a Ubuntu AMI using [a terraform module](https://github.com/bobtfish/terraform-ubuntu-ami).
+Lets think about how we should lookup a Ubuntu AMI using [a module](https://github.com/bobtfish/terraform-ubuntu-ami).
 
 There's [a giant table](http://cloud-images.ubuntu.com/locator/ec2) of AMIs available on the web, and the data for it is [almost](http://cloud-images.ubuntu.com/locator/ec2/releasesTable), [but not quite](https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/getvariables.rb#L11) JSON you can parse.
 
@@ -93,7 +93,7 @@ Using almost the same pattern, and [the aws cli tool](http://aws.amazon.com/cli/
 which will read your [~/.aws/credentials file](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files) to
 pull in a list of all your available availability zones.
 
-Due to the way terraform currently handles things, [this module](https://github.com/bobtfish/terraform-azs) just exports three variables, a primary, secondary, and (where available)
+Due to the way Terraform currently handles things, [this module](https://github.com/bobtfish/terraform-azs) just exports three variables, a primary, secondary, and (where available)
 tertiary availability zone (ordered by alphabetical sort).
 
 ```
@@ -142,7 +142,7 @@ just enough stuff to string the modules we've written together and bring up a co
 
 You'll need:
 
-  * [my fork](https://github.com/bobtfish/terraform) of terraform
+  * [my fork](https://github.com/bobtfish/terraform) of Terraform
   * [An ~/.aws/credentials file](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files) with a _[demo]_ section
 
 ```
@@ -179,8 +179,8 @@ terraform-example-vpc (master👆 ✔) ⭐
 
 This has setup an ssh key to allow you to log into the created instances.
 
-Now, change directory into the region+account folder ([terraform can only do one region at once currently](https://github.com/hashicorp/terraform/pull/1281)),
-and run make again. This pulls in all the necessary terraform modules (using terraform get), and then runs their Makefiles by iterating over .terraform/modules to ensure that _variables.tf.json_ is built it needed.
+Now, change directory into the region+account folder ([Terraform can only do one region at once currently](https://github.com/hashicorp/terraform/pull/1281)),
+and run make again. This pulls in all the necessary modules (using terraform get), and then runs their Makefiles by iterating over .terraform/modules to ensure that _variables.tf.json_ is built it needed.
 
 Note that even modules which don't need to build _variables.tf.json_ are required to have a Makefile (which can do nothing).
 
@@ -248,7 +248,7 @@ the terraform.tfstate file removed and the details in _terraform.tfvars_ updated
 
 ## Conclusion
 
-Whilst a bunch of stuff in the current demo is more simplistic than a real infrastructure, it shows that terraform can be used to
+Whilst a bunch of stuff in the current demo is more simplistic than a real infrastructure, it shows that Terraform can be used to
 bootstrap entire VPCs with non-trivial configurations.
 
 I haven't (yet) installed anything 'real' other than a docker container and some iptables rules as cloud-init is a terrible
@@ -259,5 +259,5 @@ on top of pre-existing infrastructre and puppet masters/chef servers (add vpc pe
 ## What's next?
 
 In the next post (or rather, in my next set of hacking that I may or may not write up ;), I plan to use the infrastructure details of this subnet to test out
-the remote module feaure, try to get a puppetmaster (with EC2 tags as the ENC) up, and explore storing the terraform state in [consul](https://www.consul.io/).
+the remote module feaure, try to get a puppetmaster (with EC2 tags as the ENC) up, and explore storing the state in [consul](https://www.consul.io/).
 
