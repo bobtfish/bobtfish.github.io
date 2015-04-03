@@ -3,7 +3,7 @@ layout: post
 title: "Terraform 0.4.0"
 date: 2015-04-03 00:48
 comments: true
-categories: 
+categories: terraform, aws, devops
 ---
 
 [Terraform 0.4.0 is out](https://hashicorp.com/blog/terraform-0-4.html), with the [remote modules](https://github.com/hashicorp/terraform/pull/1185) feature!
@@ -25,7 +25,9 @@ This is pretty neat, and it'll be super cool to allow multiple teams to work on 
 of the infrastructure, using the [consul state store](https://www.terraform.io/docs/commands/remote.html) and [ACLs](https://www.consul.io/docs/internals/acl.html),
 more news on that once I've had chance to play with it.
 
-I've written a bunch of modules to power my examples, and I thought that I'd
+Unfortunately, the credentials file feature didn't make 0.4.0, and I [do math that isn't possible in master](https://github.com/bobtfish/terraform-aws-coreos-kubernates-cluster/blob/master/nodes.tf#L28) now, so you'll still need to use my fork if you want to use my examples verbatim.
+
+I've written a bunch of modules to power my examples though, most of which work on unpatched terraform, and I thought that I'd
 list them (in most to least reuseable order) so that you don't have to dig through all the code or my github to find them :)
 
   * [terraform-amitype](https://github.com/bobtfish/terraform-amitype) - Match an AMI type (e.g. m3.xlarge) to its virtualization type (e.g. hvm)
@@ -34,5 +36,5 @@ list them (in most to least reuseable order) so that you don't have to dig throu
   * [terraform-coreos-ami](https://github.com/bobtfish/terraform-coreos-ami) - Look up the most recent [CoreOS](https://coreos.com/) [AMI](https://coreos.com/docs/running-coreos/cloud-providers/ec2/)
   * [terraform-vpc](https://github.com/bobtfish/terraform-vpc) - Build out an initial VPC with 2 AZs
   * [terraform-vpc-nat](https://github.com/bobtfish/terraform-vpc-nat) - Build an initial NAT instance out on top of a VPC made with terraform-vpc
-  * [terraform-aws-coreos-kubernates-cluster](https://github.com/bobtfish/terraform-aws-coreos-kubernates-cluster) - Kubernates cluster on CoreOS (n.b. not yet working out the box)
+  * [terraform-aws-coreos-kubernates-cluster](https://github.com/bobtfish/terraform-aws-coreos-kubernates-cluster) - Kubernates cluster on CoreOS (n.b. not yet working out the box, needs patched terraform)
 
