@@ -9,7 +9,9 @@
   <meta name="author" content="Tomas Doran">
 
   
-  <meta name="description" content="I&rsquo;ve been playing around with Terraform a bunch recently, and I&rsquo;m pretty excited about 0.4.0. However at the moment, the examples leave &hellip;">
+  <meta name="description" content="Terraform 0.4.0 is out, with the remote modules feature!
+As per my last post,
+I&rsquo;ve been playing around with this already, and I thought it was &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +67,53 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/04/03/terraform-0-dot-4-0/">Terraform 0.4.0</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-03T00:48:00+01:00" pubdate data-updated="true">Apr 3<span>rd</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="https://hashicorp.com/blog/terraform-0-4.html">Terraform 0.4.0 is out</a>, with the <a href="https://github.com/hashicorp/terraform/pull/1185">remote modules</a> feature!
+As per <a href="http://localhost:4000/blog/2015/03/29/terraform-from-the-ground-up/">my last post</a>,
+I&rsquo;ve been playing around with this already, and I thought it was worth showing
+off my simple example of this feature actually being used.</p>
+
+<p>It&rsquo;s wrapped up in a way that you can fork my 2 repositories and play with it
+yourself, and I encourage <a href="https://github.com/bobtfish/terraform-example-vpc-infra/blob/master/eucentral1-demo/terraform.tfvars#L3">you to do so</a></p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/04/03/terraform-0-dot-4-0/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -147,6 +196,118 @@ and a simple example that you should be able to clone and run.</p>
 
 
 <hr />
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/08/13/dockersh/">Dockersh</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-13T21:49:00+01:00" pubdate data-updated="true">Aug 13<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I made a thing! <a href="https://github.com/Yelp/dockersh">dockersh</a> &ndash; A user shell for isolated, containerized environments.</p>
+
+<p>This is my first experiment programming Go, so excuse the terrible code ;_)</p>
+
+<p>There&rsquo;s some more details about the what and why that you should check out over on the <a href="http://engineeringblog.yelp.com/2014/08/">Yelp Engineering blog</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/26/code-as-config-considered-harmful/">Code as Config Considered Harmful</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-26T12:34:00+01:00" pubdate data-updated="true">Apr 26<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Configuration as code a (or the wider scoped infrastructure as code) is a devops mantra.</p>
+
+<p>I&rsquo;m entirely behind this &ndash; repeated / duplicated configuration is an evil thing
+and taking steps to be able to keep your configs in revision control and template
+repeated sections are extremely helpful.</p>
+
+<p>So what do I mean by &ldquo;code as config&rdquo;?</p>
+
+<p>DSLs! (Domain Specific Languages)</p>
+
+<p>The idea of a DSL is to write something a more &lsquo;natural language&rsquo; than as normal code.</p>
+
+<p>This is also a great idea in a bunch of cases.</p>
+
+<p>However DSLs can be (and are) overused when it&rsquo;s not appropriate.</p>
+
+<p>Picking on one example to cover in depth (I&rsquo;ll illustrate plenty more at the end), I&rsquo;m going
+to pick on Puppetfile.</p>
+
+<p><a href="https://github.com/rodjek/librarian-puppet">https://github.com/rodjek/librarian-puppet</a></p>
+
+<p><a href="https://github.com/adrienthebo/r10k">https://github.com/adrienthebo/r10k</a></p>
+
+<p>Puppetfile is an extremely simple DSL, it could easily just be a YAML or JSON file.</p>
+
+<p>In fact, I think it <em>should</em> be a YAML or JSON file instead.</p>
+
+<p>Anything which wants to read Puppetfile either needs to be written in ruby, and re-implement the DSL
+(and as r10k shows, this is pretty trivial <a href="https://github.com/adrienthebo/r10k/blob/master/lib/r10k/puppetfile.rb#L90">https://github.com/adrienthebo/r10k/blob/master/lib/r10k/puppetfile.rb#L90</a>)
+, or needs to re-implement a subset of ruby enough to read Puppetfile.</p>
+
+<p>This isn&rsquo;t an insurmountable problem, as noted the subset of ruby used is very very simple.</p>
+
+<p>The larger issue comes if you wanted to <em>write</em> that config out again.</p>
+
+<p>I&rsquo;d like to be able to make a Jenkins job which upgrades any modules I&rsquo;m using for newer versions, and then runs the
+tests in my code.</p>
 </div>
   
   
@@ -591,6 +752,10 @@ and/or working on.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/04/03/terraform-0-dot-4-0/">Terraform 0.4.0</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/03/29/terraform-from-the-ground-up/">Terraform From the Ground Up</a>
       </li>
     
@@ -599,15 +764,11 @@ and/or working on.</p>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/04/15/me-in_video_form/">Me, in Video Form</a>
+        <a href="/blog/2014/08/13/dockersh/">Dockersh</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/11/06/we-have-always-been-at-war-with-eastasia/">We Have Always Been at War With Eastasia</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/06/read-only-bind-mounts-and-docker/">Read Only Bind Mounts and Docker for Unix Domain Sockets</a>
+        <a href="/blog/2014/04/26/code-as-config-considered-harmful/">Code as Config Considered Harmful</a>
       </li>
     
   </ul>

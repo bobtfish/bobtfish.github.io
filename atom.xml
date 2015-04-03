@@ -4,7 +4,7 @@
   <title><![CDATA[t0m's very occasional blog]]></title>
   <link href="http://bobtfish.github.io/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2015-03-30T01:36:10+01:00</updated>
+  <updated>2015-04-03T01:26:08+01:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Terraform 0.4.0]]></title>
+    <link href="http://bobtfish.github.io/blog/2015/04/03/terraform-0-dot-4-0/"/>
+    <updated>2015-04-03T00:48:00+01:00</updated>
+    <id>http://bobtfish.github.io/blog/2015/04/03/terraform-0-dot-4-0</id>
+    <content type="html"><![CDATA[<p><a href="https://hashicorp.com/blog/terraform-0-4.html">Terraform 0.4.0 is out</a>, with the <a href="https://github.com/hashicorp/terraform/pull/1185">remote modules</a> feature!
+As per <a href="http://localhost:4000/blog/2015/03/29/terraform-from-the-ground-up/">my last post</a>,
+I&rsquo;ve been playing around with this already, and I thought it was worth showing
+off my simple example of this feature actually being used.</p>
+
+<p>It&rsquo;s wrapped up in a way that you can fork my 2 repositories and play with it
+yourself, and I encourage <a href="https://github.com/bobtfish/terraform-example-vpc-infra/blob/master/eucentral1-demo/terraform.tfvars#L3">you to do so</a></p>
+
+<!-- more -->
+
+
+<p>If you take <a href="https://github.com/bobtfish/terraform-example-vpc/tree/master/eucentral1-demo">the example VPC</a>
+from my last post (with the state file committed), you can now pull in the data in another terraform
+repository <a href="https://github.com/bobtfish/terraform-example-vpc-infra/blob/master/eucentral1-demo/vpc.tf">like this</a>
+and then use the outputs it defines <a href="https://github.com/bobtfish/terraform-example-vpc-infra/blob/master/eucentral1-demo/kubernates.tf#L8">like this</a>.</p>
+
+<p>This is pretty neat, and it&rsquo;ll be super cool to allow multiple teams to work on different layers
+of the infrastructure, using the <a href="https://www.terraform.io/docs/commands/remote.html">consul state store</a> and <a href="https://www.consul.io/docs/internals/acl.html">ACLs</a>,
+more news on that once I&rsquo;ve had chance to play with it.</p>
+
+<p>I&rsquo;ve written a bunch of modules to power my examples, and I thought that I&rsquo;d
+list them (in most to least reuseable order) so that you don&rsquo;t have to dig through all the code or my github to find them :)</p>
+
+<ul>
+<li><a href="https://github.com/bobtfish/terraform-amitype">terraform-amitype</a> &ndash; Match an AMI type (e.g. m3.xlarge) to it&rsquo;s virtualization type (e.g. hvm)</li>
+<li><a href="https://github.com/bobtfish/terraform-azs">terraform-azs</a> &ndash; Work out which azs each of your accounts has access to for easy lookup/templating across accounts.</li>
+<li><a href="https://github.com/bobtfish/terraform-ubuntu-ami">terraform-ubuntu-ami</a> &ndash; Look up Ubuntu <a href="http://cloud-images.ubuntu.com/locator/ec2/">AMIs</a></li>
+<li><a href="https://github.com/bobtfish/terraform-coreos-ami">terraform-coreos-ami</a> &ndash; Look up the most recent <a href="https://coreos.com/">CoreOS</a> <a href="https://coreos.com/docs/running-coreos/cloud-providers/ec2/">AMI</a></li>
+<li><a href="https://github.com/bobtfish/terraform-vpc">terraform-vpc</a> &ndash; Build out an initial VPC with 2 AZs</li>
+<li><a href="https://github.com/bobtfish/terraform-vpc-nat">terraform-vpc-nat</a> &ndash; Build an initial NAT instance out on top of a VPC made with terraform-vpc</li>
+<li><a href="https://github.com/bobtfish/terraform-aws-coreos-kubernates-cluster">terraform-aws-coreos-kubernates-cluster</a> &ndash; Kubernates cluster on CoreOS (n.b. not yet working out the box)</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Terraform from the ground up]]></title>
@@ -384,6 +425,64 @@ the remote module feaure, try to get a puppetmaster (with EC2 tags as the ENC) u
 
 
 <hr />
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[dockersh]]></title>
+    <link href="http://bobtfish.github.io/blog/2014/08/13/dockersh/"/>
+    <updated>2014-08-13T21:49:00+01:00</updated>
+    <id>http://bobtfish.github.io/blog/2014/08/13/dockersh</id>
+    <content type="html"><![CDATA[<p>I made a thing! <a href="https://github.com/Yelp/dockersh">dockersh</a> &ndash; A user shell for isolated, containerized environments.</p>
+
+<p>This is my first experiment programming Go, so excuse the terrible code ;_)</p>
+
+<p>There&rsquo;s some more details about the what and why that you should check out over on the <a href="http://engineeringblog.yelp.com/2014/08/">Yelp Engineering blog</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Code as config considered harmful]]></title>
+    <link href="http://bobtfish.github.io/blog/2014/04/26/code-as-config-considered-harmful/"/>
+    <updated>2014-04-26T12:34:00+01:00</updated>
+    <id>http://bobtfish.github.io/blog/2014/04/26/code-as-config-considered-harmful</id>
+    <content type="html"><![CDATA[<p>Configuration as code a (or the wider scoped infrastructure as code) is a devops mantra.</p>
+
+<p>I&rsquo;m entirely behind this &ndash; repeated / duplicated configuration is an evil thing
+and taking steps to be able to keep your configs in revision control and template
+repeated sections are extremely helpful.</p>
+
+<p>So what do I mean by &ldquo;code as config&rdquo;?</p>
+
+<p>DSLs! (Domain Specific Languages)</p>
+
+<p>The idea of a DSL is to write something a more &lsquo;natural language&rsquo; than as normal code.</p>
+
+<p>This is also a great idea in a bunch of cases.</p>
+
+<p>However DSLs can be (and are) overused when it&rsquo;s not appropriate.</p>
+
+<p>Picking on one example to cover in depth (I&rsquo;ll illustrate plenty more at the end), I&rsquo;m going
+to pick on Puppetfile.</p>
+
+<p><a href="https://github.com/rodjek/librarian-puppet">https://github.com/rodjek/librarian-puppet</a></p>
+
+<p><a href="https://github.com/adrienthebo/r10k">https://github.com/adrienthebo/r10k</a></p>
+
+<p>Puppetfile is an extremely simple DSL, it could easily just be a YAML or JSON file.</p>
+
+<p>In fact, I think it <em>should</em> be a YAML or JSON file instead.</p>
+
+<p>Anything which wants to read Puppetfile either needs to be written in ruby, and re-implement the DSL
+(and as r10k shows, this is pretty trivial <a href="https://github.com/adrienthebo/r10k/blob/master/lib/r10k/puppetfile.rb#L90">https://github.com/adrienthebo/r10k/blob/master/lib/r10k/puppetfile.rb#L90</a>)
+, or needs to re-implement a subset of ruby enough to read Puppetfile.</p>
+
+<p>This isn&rsquo;t an insurmountable problem, as noted the subset of ruby used is very very simple.</p>
+
+<p>The larger issue comes if you wanted to <em>write</em> that config out again.</p>
+
+<p>I&rsquo;d like to be able to make a Jenkins job which upgrades any modules I&rsquo;m using for newer versions, and then runs the
+tests in my code.</p>
 ]]></content>
   </entry>
   
