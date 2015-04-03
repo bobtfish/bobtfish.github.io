@@ -28,7 +28,7 @@ more news on that once I've had chance to play with it.
 I've written a bunch of modules to power my examples, and I thought that I'd
 list them (in most to least reuseable order) so that you don't have to dig through all the code or my github to find them :)
 
-  * [terraform-amitype](https://github.com/bobtfish/terraform-amitype) - Match an AMI type (e.g. m3.xlarge) to it's virtualization type (e.g. hvm)
+  * [terraform-amitype](https://github.com/bobtfish/terraform-amitype) - Match an AMI type (e.g. m3.xlarge) to its virtualization type (e.g. hvm)
   * [terraform-azs](https://github.com/bobtfish/terraform-azs) - Work out which azs each of your accounts has access to for easy lookup/templating across accounts.
   * [terraform-ubuntu-ami](https://github.com/bobtfish/terraform-ubuntu-ami) - Look up Ubuntu [AMIs](http://cloud-images.ubuntu.com/locator/ec2/)
   * [terraform-coreos-ami](https://github.com/bobtfish/terraform-coreos-ami) - Look up the most recent [CoreOS](https://coreos.com/) [AMI](https://coreos.com/docs/running-coreos/cloud-providers/ec2/)
