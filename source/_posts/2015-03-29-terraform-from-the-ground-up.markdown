@@ -55,19 +55,19 @@ showing how I wrap them up together with the actual code/config to launch a VPC.
 
 ### Looking up AMIs
 
-Lets think about how we should lookup a Ubuntu AMI using [a module](https://github.com/bobtfish/terraform-ubuntu-ami).
+Lets think about how we should lookup a Ubuntu AMI using [a module](https://github.com/terraform-community-modules/tf_aws_ubuntu_ami).
 
-There's [a giant table](http://cloud-images.ubuntu.com/locator/ec2) of AMIs available on the web, and the data for it is [almost](http://cloud-images.ubuntu.com/locator/ec2/releasesTable), [but not quite](https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/getvariables.rb#L11) JSON you can parse.
+There's [a giant table](http://cloud-images.ubuntu.com/locator/ec2) of AMIs available on the web, and the data for it is [almost](http://cloud-images.ubuntu.com/locator/ec2/releasesTable), [but not quite](https://github.com/terraform-community-modules/tf_aws_ubuntu_ami/blob/master/getvariables.rb#L11) JSON you can parse.
 
-So I wrote a getvariables.rb script, a [Makefile](https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/Makefile) which generates [variables.tf.json](https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/variables.tf.json) - end result, we have a giant hash table of all the AMIs for Ubuntu in all of the regions.
+So I wrote a getvariables.rb script, a [Makefile](https://github.com/terraform-community-modules/tf_aws_ubuntu_ami/blob/master/Makefile) which generates [variables.tf.json](https://github.com/terraform-community-modules/tf_aws_ubuntu_ami/blob/master/variables.tf.json) - end result, we have a giant hash table of all the AMIs for Ubuntu in all of the regions.
 
-We can then use a combination of variables and the [lookup + format functions](https://github.com/bobtfish/terraform/blob/master/website/source/docs/configuration/interpolation.html.md#user-content-built-in-functions) in [the main.tf](https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/main.tf) to output the desired AMI.
+We can then use a combination of variables and the [lookup + format functions](https://github.com/bobtfish/terraform/blob/master/website/source/docs/configuration/interpolation.html.md#user-content-built-in-functions) in [the main.tf](https://github.com/terraform-community-modules/tf_aws_ubuntu_ami/blob/master/main.tf) to output the desired AMI.
 
 Then we just use the module, supplying it the params it needs, and we get the right AMI.
 
 ```
 module "ami" {
-  source = "github.com/bobtfish/terraform-ubuntu-ami"
+  source = "github.com/terraform-community-modules/tf_aws_ubuntu_ami"
   region = "eu-central-1"
   distribution = "trusty"
   architecture = "amd64"
@@ -189,10 +189,10 @@ Note that even modules which don't need to build _variables.tf.json_ are require
 ```
 eucentral1-demo (master👆 ✔) ⭐ make
 terraform get
-Get: git::https://github.com/bobtfish/terraform-ubuntu-ami.git
+Get: git::https://github.com/terraform-community-modules/tf_aws_ubuntu_ami.git
 Get: git::https://github.com/bobtfish/terraform-vpc-nat.git
 Get: git::https://github.com/bobtfish/terraform-vpc.git
-Get: git::https://github.com/bobtfish/terraform-ubuntu-ami.git
+Get: git::https://github.com/terraform-community-modules/tf_aws_ubuntu_ami.git
 Get: git::https://github.com/bobtfish/terraform-azs.git
 for i in $(ls .terraform/modules/); do make -C ".terraform/modules/$i"; done
 make[1]: Entering directory `/home/t0m/terraform-example-vpc/eucentral1-demo/.terraform/modules/1b2917ba643e4bf90b900b6da59b2e05'

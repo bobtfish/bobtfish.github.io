@@ -32,8 +32,8 @@ list them (in most to least reuseable order) so that you don't have to dig throu
 
   * [terraform-amitype](https://github.com/bobtfish/terraform-amitype) - Match an AMI type (e.g. m3.xlarge) to its virtualization type (e.g. hvm)
   * [terraform-azs](https://github.com/bobtfish/terraform-azs) - Work out which azs each of your accounts has access to for easy lookup/templating across accounts.
-  * [terraform-ubuntu-ami](https://github.com/bobtfish/terraform-ubuntu-ami) - Look up Ubuntu [AMIs](http://cloud-images.ubuntu.com/locator/ec2/)
-  * [terraform-coreos-ami](https://github.com/bobtfish/terraform-coreos-ami) - Look up the most recent [CoreOS](https://coreos.com/) [AMI](https://coreos.com/docs/running-coreos/cloud-providers/ec2/)
+  * [tf_aws_ubuntu_ami](https://github.com/terraform-community-modules/tf_aws_ubuntu_ami) - Look up Ubuntu [AMIs](http://cloud-images.ubuntu.com/locator/ec2/)
+  * [tf_aws_coreos_ami](https://github.com/terraform-community-modules/tf_aws_ubuntu_ami) - Look up the most recent [CoreOS](https://coreos.com/) [AMI](https://coreos.com/docs/running-coreos/cloud-providers/ec2/)
   * [terraform-vpc](https://github.com/bobtfish/terraform-vpc) - Build out an initial VPC with 2 AZs
   * [terraform-vpc-nat](https://github.com/bobtfish/terraform-vpc-nat) - Build an initial NAT instance out on top of a VPC made with terraform-vpc
   * [terraform-aws-coreos-kubernates-cluster](https://github.com/bobtfish/terraform-aws-coreos-kubernates-cluster) - Kubernates cluster on CoreOS (n.b. not yet working out the box, needs patched terraform)
