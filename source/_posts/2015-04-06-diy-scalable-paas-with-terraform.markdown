@@ -187,3 +187,8 @@ Whilst I don't think that anything but my most basic level of modules (e.g. AMI 
 I hope this example shows that it's possible to use terraform as a turnkey component in building repeatable
 and composable infrastructures.
 
+## Credits
+
+Container Solutions have [an excellent blog post](http://container-solutions.com/2015/04/how-to-set-up-mesos-on-google-cloud-with-terraform/)
+on making a Mesos cluster on [GCE](https://cloud.google.com/compute/) - I stole it, converted it to AWS and added the service discovery/load balancing.
+
