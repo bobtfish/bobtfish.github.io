@@ -141,13 +141,13 @@ showing how I wrap them up together with the actual code/config to launch a VPC.
 
 <h3>Looking up AMIs</h3>
 
-<p>Lets think about how we should lookup a Ubuntu AMI using <a href="https://github.com/bobtfish/terraform-ubuntu-ami">a module</a>.</p>
+<p>Lets think about how we should lookup a Ubuntu AMI using <a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami">a module</a>.</p>
 
-<p>There&rsquo;s <a href="http://cloud-images.ubuntu.com/locator/ec2">a giant table</a> of AMIs available on the web, and the data for it is <a href="http://cloud-images.ubuntu.com/locator/ec2/releasesTable">almost</a>, <a href="https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/getvariables.rb#L11">but not quite</a> JSON you can parse.</p>
+<p>There&rsquo;s <a href="http://cloud-images.ubuntu.com/locator/ec2">a giant table</a> of AMIs available on the web, and the data for it is <a href="http://cloud-images.ubuntu.com/locator/ec2/releasesTable">almost</a>, <a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami/blob/master/getvariables.rb#L11">but not quite</a> JSON you can parse.</p>
 
-<p>So I wrote a getvariables.rb script, a <a href="https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/Makefile">Makefile</a> which generates <a href="https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/variables.tf.json">variables.tf.json</a> &ndash; end result, we have a giant hash table of all the AMIs for Ubuntu in all of the regions.</p>
+<p>So I wrote a getvariables.rb script, a <a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami/blob/master/Makefile">Makefile</a> which generates <a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami/blob/master/variables.tf.json">variables.tf.json</a> &ndash; end result, we have a giant hash table of all the AMIs for Ubuntu in all of the regions.</p>
 
-<p>We can then use a combination of variables and the <a href="https://github.com/bobtfish/terraform/blob/master/website/source/docs/configuration/interpolation.html.md#user-content-built-in-functions">lookup + format functions</a> in <a href="https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/main.tf">the main.tf</a> to output the desired AMI.</p>
+<p>We can then use a combination of variables and the <a href="https://github.com/bobtfish/terraform/blob/master/website/source/docs/configuration/interpolation.html.md#user-content-built-in-functions">lookup + format functions</a> in <a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami/blob/master/main.tf">the main.tf</a> to output the desired AMI.</p>
 
 <p>Then we just use the module, supplying it the params it needs, and we get the right AMI.</p>
 
@@ -166,7 +166,7 @@ showing how I wrap them up together with the actual code/config to launch a VPC.
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>module "ami" {
-</span><span class='line'>  source = "github.com/bobtfish/terraform-ubuntu-ami"
+</span><span class='line'>  source = "github.com/terraform-community-modules/tf_aws_ubuntu_ami"
 </span><span class='line'>  region = "eu-central-1"
 </span><span class='line'>  distribution = "trusty"
 </span><span class='line'>  architecture = "amd64"
@@ -355,10 +355,10 @@ and run make again. This pulls in all the necessary modules (using terraform get
 <span class='line-number'>29</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>eucentral1-demo (master👆 ✔) ⭐ make
 </span><span class='line'>terraform get
-</span><span class='line'>Get: git::https://github.com/bobtfish/terraform-ubuntu-ami.git
+</span><span class='line'>Get: git::https://github.com/terraform-community-modules/tf_aws_ubuntu_ami.git
 </span><span class='line'>Get: git::https://github.com/bobtfish/terraform-vpc-nat.git
 </span><span class='line'>Get: git::https://github.com/bobtfish/terraform-vpc.git
-</span><span class='line'>Get: git::https://github.com/bobtfish/terraform-ubuntu-ami.git
+</span><span class='line'>Get: git::https://github.com/terraform-community-modules/tf_aws_ubuntu_ami.git
 </span><span class='line'>Get: git::https://github.com/bobtfish/terraform-azs.git
 </span><span class='line'>for i in $(ls .terraform/modules/); do make -C ".terraform/modules/$i"; done
 </span><span class='line'>make[1]: Entering directory `/home/t0m/terraform-example-vpc/eucentral1-demo/.terraform/modules/1b2917ba643e4bf90b900b6da59b2e05'
@@ -503,6 +503,10 @@ the remote module feaure, try to get a puppetmaster (with EC2 tags as the ENC) u
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/04/06/diy-scalable-paas-with-terraform/">DIY Scalable PAAS With Terraform</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/04/03/terraform-0-dot-4-0/">Terraform 0.4.0</a>
       </li>
     
@@ -516,10 +520,6 @@ the remote module feaure, try to get a puppetmaster (with EC2 tags as the ENC) u
     
       <li class="post">
         <a href="/blog/2014/08/13/dockersh/">Dockersh</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/26/code-as-config-considered-harmful/">Code as Config Considered Harmful</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: aws, | t0m's very occasional blog]]></title>
   <link href="http://bobtfish.github.io/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2015-04-03T01:26:08+01:00</updated>
+  <updated>2015-04-07T18:43:32+01:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -12,6 +12,278 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[DIY Scalable PAAS with Terraform]]></title>
+    <link href="http://bobtfish.github.io/blog/2015/04/06/diy-scalable-paas-with-terraform/"/>
+    <updated>2015-04-06T23:45:00+01:00</updated>
+    <id>http://bobtfish.github.io/blog/2015/04/06/diy-scalable-paas-with-terraform</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been ranting about <a href="https://www.terraform.io/">Terraform</a> <a href="/blog/2015/03/29/terraform-from-the-ground-up/">a</a> <a href="/blog/2015/04/03/terraform-0-dot-4-0/">lot</a> recently, and I&rsquo;ve shown some pretty
+neat examples of building a VPC &ndash; however before now I haven&rsquo;t got anything <em>actually</em>
+useful running.</p>
+
+<p>In this post, we&rsquo;re gonna change that, and launch ourselves a publicly
+available and scalable PAAS (Platform As A Service), built around Apache <a href="http://mesos.apache.org/">Mesos</a> and <a href="https://github.com/mesosphere/marathon">Marathon</a>
+with <a href="http://nginx.org/">nginx</a> and Amazon&rsquo;s <a href="http://aws.amazon.com/elasticloadbalancing/">ELB</a> for load balancing and <a href="http://aws.amazon.com/route53/">Route53</a> for DNS.</p>
+
+<!-- more -->
+
+
+<h2>Getting setup</h2>
+
+<p>You&rsquo;ll need an AWS account, a Ubuntu machine and a domain you control (which doesn&rsquo;t have to be in AWS) for this demo.
+My example domain is <em>notanisp.net</em>, and so the subdomain I&rsquo;m going to use in all the examples is <em>mesos.notanisp.net</em></p>
+
+<p>You&rsquo;ll also need the <a href="http://aws.amazon.com/cli/">AWS cli</a> and an <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files">~/.aws/credentials</a>
+file with a <em>[demo]</em> section in it.</p>
+
+<p>In your AWS account, you need to go into the IAM menus, and create a &lsquo;<a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-usingrole-instanceprofile.html">Role</a>&rsquo;,
+which will be given to the machines we launch, to <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ExamplePolicies_EC2.html">allow them to find out other instances</a>.</p>
+
+<p>Your policy should be named <em>describe-instances</em> and the body of the policy should contain an inline policy:</p>
+
+<pre><code>{
+   "Version": "2012-10-17",
+   "Statement": [{
+      "Effect": "Allow",
+      "Action": "ec2:Describe*",
+      "Resource": "*"
+    }
+   ]
+}
+</code></pre>
+
+<p>If you&rsquo;re feeling lazy, then you can just create the role with the policy of AmazonEC2ReadOnlyAccess.</p>
+
+<h2>Getting terraform</h2>
+
+<p>The easiest way to get my patched version of terraform is to build it in vagrant:</p>
+
+<p>```</p>
+
+<pre><code>git clone https://github.com/bobtfish/terraform.git
+cd terraform
+vagrant up
+vagrant ssh
+sudo apt-get install -y ruby ruby-json python-pip
+sudo pip install awscli
+export PATH=$PATH:/opt/go/bin:/opt/gopath/bin
+echo 'export PATH=$PATH:/opt/go/bin:/opt/gopath/bin' &gt;&gt; ~/.bashrc
+mkdir -p /opt/gopath/src/github.com/hashicorp
+cp -r /vagrant /opt/gopath/src/github.com/hashicorp/terraform
+cd /opt/gopath/src/github.com/hashicorp/terraform
+make updatedeps
+make dev
+cd ~/
+git clone https://github.com/bobtfish/terraform-example-mesos-cluster
+mkdir ~/.aws
+vi ~/.aws/credentials
+</code></pre>
+
+<p>```</p>
+
+<p>Adding something like this:</p>
+
+<pre><code>[demo]
+aws_access_key_id=AAAAAAAA
+aws_secret_access_key=BBBBBBBBBBBBBBBBB
+</code></pre>
+
+<p>Or if you prefer (and you trust me!), [here&rsquo;s a .deb[(<a href="http://notanisp-packages.s3-website-eu-west-1.amazonaws.com/dists/precise/main/binary-amd64/terraform_0.4.0-bobtfish0_amd64.deb">http://notanisp-packages.s3-website-eu-west-1.amazonaws.com/dists/precise/main/binary-amd64/terraform_0.4.0-bobtfish0_amd64.deb</a>)
+you should be able to just install:</p>
+
+<h2>Building your cluster</h2>
+
+<p>Once you&rsquo;re all setup, you can get started building your cluster:</p>
+
+<p><code>
+cd terraform-example-mesos-cluster
+make
+</code></p>
+
+<p>This generates an ssh key (stored in <em>id_rsa</em>) to be able to ssh into your instances,
+and captures your IP (stored in <em>admin_iprange.txt</em>) to allow access to the Mesos and
+Marathon admin interfaces later. Note: You can edit the admin_iprange.txt file to
+allow more IPs access, but it is <em>not</em> recommended to change this to 0.0.0.0/0,
+as otherwise random people on the internet will be able to run jobs on your Mesos
+cluster!</p>
+
+<p>Lets go ahead and build out the cluster:</p>
+
+<p><code>
+cd eu-central-1
+vi terraform.tfvars # Adjust the 'domain' value to a subdomain
+make # This pulls down all the terraform modules you need, and builds a map of which AZs your account can see.
+terraform apply
+</code></p>
+
+<p>The last step will take a while, go grab a coffee.</p>
+
+<p>Eventually, terraform will finish, with output like this:</p>
+
+<p>```
+Apply complete! Resources: 35 added, 0 changed, 0 destroyed.</p>
+
+<p>The state of your infrastructure has been saved to the path
+below. This state is required to modify and destroy your
+infrastructure, so keep it safe. To inspect the complete state
+use the <code>terraform show</code> command.</p>
+
+<p>State path: terraform.tfstate</p>
+
+<p>Outputs:</p>
+
+<p>  marathon_api  = <a href="http://marathon.admin.mesos.notanisp.net">http://marathon.admin.mesos.notanisp.net</a>
+  nat_public_ip = 52.28.37.228
+```</p>
+
+<p>Once it&rsquo;s finished, go into the route 53 control panel, and you should see your subdomain zone.
+Go and grab its NS records:</p>
+
+<p><img src="https://raw.githubusercontent.com/bobtfish/terraform-example-mesos-cluster/master/route53.png" alt="Route53 console" /></p>
+
+<p>and put those into whatever you use to manage your main domain as a delegated record.</p>
+
+<h2>Gettins admin pages and launching an app</h2>
+
+<p>After DNS catches up, you should be able to resolve:</p>
+
+<ul>
+<li>mesos.admin.mesos.notanisp.net</li>
+<li>marathon.admin.mesos.notanisp.net</li>
+<li>www.mesos.notanisp.net</li>
+</ul>
+
+
+<p>Hit <a href="http://marathon.admin.mesos.notanisp.net">http://marathon.admin.mesos.notanisp.net</a> with your browser, and you should be able to see the
+Marathon admin screen. (And you can see the Mesos admin screen at <a href="http://mesos.admin.mesos.notanisp.net">http://mesos.admin.mesos.notanisp.net</a>)</p>
+
+<p>You can now <a href="https://mesosphere.com/docs/tutorials/run-services-with-marathon">launch an app</a>!</p>
+
+<p>I&rsquo;ve automated the launching of an example application, so you can just say:</p>
+
+<pre><code>make deploywww
+</code></pre>
+
+<p>This will deploy <a href="https://github.com/bobtfish/terraform-example-mesos-cluster/blob/master/eucentral1-demo/marathon_www.json">the hello world app</a>
+ (from the mesosphere tutorial linked above) named &lsquo;/www&rsquo;
+into marathon:</p>
+
+<p><img src="/images/marathon_deploy.png" alt="App deploying" /></p>
+
+<p>and after a couple of mins, you should be able to access it from <a href="http://www.mesos.notanisp.net">http://www.mesos.notanisp.net</a></p>
+
+<p>Any additional apps you launch in Marathon with names like /someapp will be automatically bound
+to a vhost on the load balancer. Pretty neat, eh?</p>
+
+<h2>What we&rsquo;re building behind the scenes.</h2>
+
+<p>We <a href="https://github.com/bobtfish/terraform-example-mesos-cluster/blob/master/eucentral1-demo/vpc.tf">ask for a VPC to be built</a>
+(with the <a href="https://github.com/bobtfish/terraform-vpc-nat">module I created</a> in <a href="http://bobtfish.github.io/blog/2015/03/29/terraform-from-the-ground-up/">a previous post</a>).</p>
+
+<p>This gives us &lsquo;front&rsquo; and &lsquo;back&rsquo; networks, and a <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html">NAT instance</a>.</p>
+
+<p>On top of that, we build out a <a href="https://github.com/bobtfish/terraform-example-mesos-cluster/blob/master/eucentral1-demo/mesos.tf">mesos cluster</a></p>
+
+<p>This comprises a number of pieces, first of all <a href="https://github.com/bobtfish/tf_aws_mesos/blob/master/mesos_master/master.conf">masters</a>, which
+run <a href="https://zookeeper.apache.org/">zookeeper</a> in addition to Marathon and Mesos. We run 3 of these by default, so one can fail without
+affecting the operation of the cluster. Also there are <a href="https://github.com/bobtfish/tf_aws_mesos/blob/master/mesos_slave/slave.conf">slaves</a>
+which actually run the Mesos workers and excute applications. We launch 5 of these, and if one fails then any tasks it was running
+will be re-launched on the remaining slaves (assuming they have enough resources to do so!).</p>
+
+<p>Then we deploy 2 <a href="https://github.com/bobtfish/tf_aws_mesos/blob/master/lb/lb.conf">load balancers</a> which discover the running applications from the marathon
+API and configure nginx, with a publicly accessible <a href="http://aws.amazon.com/elasticloadbalancing/">ELB</a> <a href="https://github.com/bobtfish/tf_aws_mesos/blob/master/elb/main.tf">in front of them</a>
+ to provide HA, in the event one of the load balancer machines fails.</p>
+
+<p>We push this <a href="https://github.com/bobtfish/tf_aws_mesos/blob/master/dns/main.tf">into DNS</a>, along with records for the <em>adminlb</em> machine.
+<a href="https://github.com/bobtfish/tf_aws_mesos/blob/master/elb/main.tf">This machine</a> is what proxies the mesos and marathon admin pages (and access to it
+is locked down to your <em>admin_iprange.txt</em>)</p>
+
+<h2>Redundancy and scaling</h2>
+
+<p>The cluster should be redundant to a load balancer or a mesos master failing. If the instance which fails can&rsquo;t be brought back
+online, it should be possible to just terminate the instance and have terraform re-create it.</p>
+
+<p>Also, you can eaisly adjust the number of slaves dynamically (just by <a href="https://github.com/bobtfish/terraform-example-mesos-cluster/blob/master/eucentral1-demo/mesos.tf#L6">changing the variable</a>
+ and running terraform), or the instance types employed (by rebuilding the cluster) if you&rsquo;d like to run more tasks, serve real
+load from the cluster, or scale whilst already serving real load!</p>
+
+<p>Marathon apps which have already been deployed can be scaled up (to more instances) just by using the Marathon API with a web browser &ndash; I encourage you to try this, scaling
+the example app up to 5 instances, or down to 1 instance and then killing 4/5 of the slaves.</p>
+
+<h2>TODOs</h2>
+
+<ul>
+<li><p>Whilst the cluster we build is redundant, currently all the machines are allocated in a single availability zone.
+I&rsquo;ll be investigating if I can get a way of generically deploying the cluster across two (or three if available) availability zones.</p></li>
+<li><p>Currently the machine&rsquo;s Internet access goes through a single NAT instance with no failover &ndash; this needs rectifying.</p></li>
+<li><p>The machines have no configuration management (no puppet/chef), which means that making any changes to them (or getting
+any security updates) involves rebuilding the instances.</p></li>
+</ul>
+
+
+<h2>Conclusion</h2>
+
+<p>Hopefully this post has shown that Terraform is already grown up enough to be used to compose real, production ready infrastructures.</p>
+
+<p>The example shown here <em>is not</em> something I&rsquo;d run as a production system, and there are a number of significant warts
+in the code (like having to pack and unpack lists into comma seperated strings), but there&rsquo;s enough of the essential complexity
+represented here to be close to &lsquo;real&rsquo; applications and deployment, and I&rsquo;m still having a great time exploring Terraform&rsquo;s
+rapidly growing capabilities, and producing reuseable modules.</p>
+
+<p>Whilst I don&rsquo;t think that anything but my most basic level of modules (e.g. AMI lookups) are likely to be reused verbatim,
+I hope this example shows that it&rsquo;s possible to use terraform as a turnkey component in building repeatable
+and composable infrastructures.</p>
+
+<h2>Credits</h2>
+
+<p>Container Solutions have <a href="http://container-solutions.com/2015/04/how-to-set-up-mesos-on-google-cloud-with-terraform/">an excellent blog post</a>
+on making a Mesos cluster on <a href="https://cloud.google.com/compute/">GCE</a> &ndash; I stole it, converted it to AWS and added the service discovery/load balancing.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Terraform 0.4.0]]></title>
+    <link href="http://bobtfish.github.io/blog/2015/04/03/terraform-0-dot-4-0/"/>
+    <updated>2015-04-03T00:48:00+01:00</updated>
+    <id>http://bobtfish.github.io/blog/2015/04/03/terraform-0-dot-4-0</id>
+    <content type="html"><![CDATA[<p><a href="https://hashicorp.com/blog/terraform-0-4.html">Terraform 0.4.0 is out</a>, with the <a href="https://github.com/hashicorp/terraform/pull/1185">remote modules</a> feature!
+As per <a href="http://localhost:4000/blog/2015/03/29/terraform-from-the-ground-up/">my last post</a>,
+I&rsquo;ve been playing around with this already, and I thought it was worth showing
+off my simple example of this feature actually being used.</p>
+
+<p>It&rsquo;s wrapped up in a way that you can fork my 2 repositories and play with it
+yourself, and I encourage <a href="https://github.com/bobtfish/terraform-example-vpc-infra/blob/master/eucentral1-demo/terraform.tfvars#L3">you to do so</a></p>
+
+<!-- more -->
+
+
+<p>If you take <a href="https://github.com/bobtfish/terraform-example-vpc/tree/master/eucentral1-demo">the example VPC</a>
+from my last post (with the state file committed), you can now pull in the data in another terraform
+repository <a href="https://github.com/bobtfish/terraform-example-vpc-infra/blob/master/eucentral1-demo/vpc.tf">like this</a>
+and then use the outputs it defines <a href="https://github.com/bobtfish/terraform-example-vpc-infra/blob/master/eucentral1-demo/kubernates.tf#L8">like this</a>.</p>
+
+<p>This is pretty neat, and it&rsquo;ll be super cool to allow multiple teams to work on different layers
+of the infrastructure, using the <a href="https://www.terraform.io/docs/commands/remote.html">consul state store</a> and <a href="https://www.consul.io/docs/internals/acl.html">ACLs</a>,
+more news on that once I&rsquo;ve had chance to play with it.</p>
+
+<p>Unfortunately, the credentials file feature didn&rsquo;t make 0.4.0, and I <a href="https://github.com/bobtfish/terraform-aws-coreos-kubernates-cluster/blob/master/nodes.tf#L28">do math that isn&rsquo;t possible in master</a> now, so you&rsquo;ll still need to use my fork if you want to use my examples verbatim.</p>
+
+<p>I&rsquo;ve written a bunch of modules to power my examples though, most of which work on unpatched terraform, and I thought that I&rsquo;d
+list them (in most to least reuseable order) so that you don&rsquo;t have to dig through all the code or my github to find them :)</p>
+
+<ul>
+<li><a href="https://github.com/bobtfish/terraform-amitype">terraform-amitype</a> &ndash; Match an AMI type (e.g. m3.xlarge) to its virtualization type (e.g. hvm)</li>
+<li><a href="https://github.com/bobtfish/terraform-azs">terraform-azs</a> &ndash; Work out which azs each of your accounts has access to for easy lookup/templating across accounts.</li>
+<li><a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami">tf_aws_ubuntu_ami</a> &ndash; Look up Ubuntu <a href="http://cloud-images.ubuntu.com/locator/ec2/">AMIs</a></li>
+<li><a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami">tf_aws_coreos_ami</a> &ndash; Look up the most recent <a href="https://coreos.com/">CoreOS</a> <a href="https://coreos.com/docs/running-coreos/cloud-providers/ec2/">AMI</a></li>
+<li><a href="https://github.com/bobtfish/terraform-vpc">terraform-vpc</a> &ndash; Build out an initial VPC with 2 AZs</li>
+<li><a href="https://github.com/bobtfish/terraform-vpc-nat">terraform-vpc-nat</a> &ndash; Build an initial NAT instance out on top of a VPC made with terraform-vpc</li>
+<li><a href="https://github.com/bobtfish/terraform-aws-coreos-kubernates-cluster">terraform-aws-coreos-kubernates-cluster</a> &ndash; Kubernates cluster on CoreOS (n.b. not yet working out the box, needs patched terraform)</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Terraform from the ground up]]></title>
@@ -68,19 +340,19 @@ showing how I wrap them up together with the actual code/config to launch a VPC.
 
 <h3>Looking up AMIs</h3>
 
-<p>Lets think about how we should lookup a Ubuntu AMI using <a href="https://github.com/bobtfish/terraform-ubuntu-ami">a module</a>.</p>
+<p>Lets think about how we should lookup a Ubuntu AMI using <a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami">a module</a>.</p>
 
-<p>There&rsquo;s <a href="http://cloud-images.ubuntu.com/locator/ec2">a giant table</a> of AMIs available on the web, and the data for it is <a href="http://cloud-images.ubuntu.com/locator/ec2/releasesTable">almost</a>, <a href="https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/getvariables.rb#L11">but not quite</a> JSON you can parse.</p>
+<p>There&rsquo;s <a href="http://cloud-images.ubuntu.com/locator/ec2">a giant table</a> of AMIs available on the web, and the data for it is <a href="http://cloud-images.ubuntu.com/locator/ec2/releasesTable">almost</a>, <a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami/blob/master/getvariables.rb#L11">but not quite</a> JSON you can parse.</p>
 
-<p>So I wrote a getvariables.rb script, a <a href="https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/Makefile">Makefile</a> which generates <a href="https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/variables.tf.json">variables.tf.json</a> &ndash; end result, we have a giant hash table of all the AMIs for Ubuntu in all of the regions.</p>
+<p>So I wrote a getvariables.rb script, a <a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami/blob/master/Makefile">Makefile</a> which generates <a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami/blob/master/variables.tf.json">variables.tf.json</a> &ndash; end result, we have a giant hash table of all the AMIs for Ubuntu in all of the regions.</p>
 
-<p>We can then use a combination of variables and the <a href="https://github.com/bobtfish/terraform/blob/master/website/source/docs/configuration/interpolation.html.md#user-content-built-in-functions">lookup + format functions</a> in <a href="https://github.com/bobtfish/terraform-ubuntu-ami/blob/master/main.tf">the main.tf</a> to output the desired AMI.</p>
+<p>We can then use a combination of variables and the <a href="https://github.com/bobtfish/terraform/blob/master/website/source/docs/configuration/interpolation.html.md#user-content-built-in-functions">lookup + format functions</a> in <a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami/blob/master/main.tf">the main.tf</a> to output the desired AMI.</p>
 
 <p>Then we just use the module, supplying it the params it needs, and we get the right AMI.</p>
 
 <p>```
 module &ldquo;ami&rdquo; {
-  source = &ldquo;github.com/bobtfish/terraform-ubuntu-ami&rdquo;
+  source = &ldquo;github.com/terraform-community-modules/tf_aws_ubuntu_ami&rdquo;
   region = &ldquo;eu-central-1&rdquo;
   distribution = &ldquo;trusty&rdquo;
   architecture = &ldquo;amd64&rdquo;
@@ -205,10 +477,10 @@ and run make again. This pulls in all the necessary modules (using terraform get
 <p><code>``
 eucentral1-demo (master👆 ✔) ⭐ make
 terraform get
-Get: git::https://github.com/bobtfish/terraform-ubuntu-ami.git
+Get: git::https://github.com/terraform-community-modules/tf_aws_ubuntu_ami.git
 Get: git::https://github.com/bobtfish/terraform-vpc-nat.git
 Get: git::https://github.com/bobtfish/terraform-vpc.git
-Get: git::https://github.com/bobtfish/terraform-ubuntu-ami.git
+Get: git::https://github.com/terraform-community-modules/tf_aws_ubuntu_ami.git
 Get: git::https://github.com/bobtfish/terraform-azs.git
 for i in $(ls .terraform/modules/); do make -C ".terraform/modules/$i"; done
 make[1]: Entering directory</code>/home/t0m/terraform-example-vpc/eucentral1-demo/.terraform/modules/1b2917ba643e4bf90b900b6da59b2e05'

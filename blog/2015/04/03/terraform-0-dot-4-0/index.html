@@ -113,17 +113,19 @@ and then use the outputs it defines <a href="https://github.com/bobtfish/terrafo
 of the infrastructure, using the <a href="https://www.terraform.io/docs/commands/remote.html">consul state store</a> and <a href="https://www.consul.io/docs/internals/acl.html">ACLs</a>,
 more news on that once I&rsquo;ve had chance to play with it.</p>
 
-<p>I&rsquo;ve written a bunch of modules to power my examples, and I thought that I&rsquo;d
+<p>Unfortunately, the credentials file feature didn&rsquo;t make 0.4.0, and I <a href="https://github.com/bobtfish/terraform-aws-coreos-kubernates-cluster/blob/master/nodes.tf#L28">do math that isn&rsquo;t possible in master</a> now, so you&rsquo;ll still need to use my fork if you want to use my examples verbatim.</p>
+
+<p>I&rsquo;ve written a bunch of modules to power my examples though, most of which work on unpatched terraform, and I thought that I&rsquo;d
 list them (in most to least reuseable order) so that you don&rsquo;t have to dig through all the code or my github to find them :)</p>
 
 <ul>
-<li><a href="https://github.com/bobtfish/terraform-amitype">terraform-amitype</a> &ndash; Match an AMI type (e.g. m3.xlarge) to it&rsquo;s virtualization type (e.g. hvm)</li>
+<li><a href="https://github.com/bobtfish/terraform-amitype">terraform-amitype</a> &ndash; Match an AMI type (e.g. m3.xlarge) to its virtualization type (e.g. hvm)</li>
 <li><a href="https://github.com/bobtfish/terraform-azs">terraform-azs</a> &ndash; Work out which azs each of your accounts has access to for easy lookup/templating across accounts.</li>
-<li><a href="https://github.com/bobtfish/terraform-ubuntu-ami">terraform-ubuntu-ami</a> &ndash; Look up Ubuntu <a href="http://cloud-images.ubuntu.com/locator/ec2/">AMIs</a></li>
-<li><a href="https://github.com/bobtfish/terraform-coreos-ami">terraform-coreos-ami</a> &ndash; Look up the most recent <a href="https://coreos.com/">CoreOS</a> <a href="https://coreos.com/docs/running-coreos/cloud-providers/ec2/">AMI</a></li>
+<li><a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami">tf_aws_ubuntu_ami</a> &ndash; Look up Ubuntu <a href="http://cloud-images.ubuntu.com/locator/ec2/">AMIs</a></li>
+<li><a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami">tf_aws_coreos_ami</a> &ndash; Look up the most recent <a href="https://coreos.com/">CoreOS</a> <a href="https://coreos.com/docs/running-coreos/cloud-providers/ec2/">AMI</a></li>
 <li><a href="https://github.com/bobtfish/terraform-vpc">terraform-vpc</a> &ndash; Build out an initial VPC with 2 AZs</li>
 <li><a href="https://github.com/bobtfish/terraform-vpc-nat">terraform-vpc-nat</a> &ndash; Build an initial NAT instance out on top of a VPC made with terraform-vpc</li>
-<li><a href="https://github.com/bobtfish/terraform-aws-coreos-kubernates-cluster">terraform-aws-coreos-kubernates-cluster</a> &ndash; Kubernates cluster on CoreOS (n.b. not yet working out the box)</li>
+<li><a href="https://github.com/bobtfish/terraform-aws-coreos-kubernates-cluster">terraform-aws-coreos-kubernates-cluster</a> &ndash; Kubernates cluster on CoreOS (n.b. not yet working out the box, needs patched terraform)</li>
 </ul>
 
 </div>
@@ -151,6 +153,12 @@ list them (in most to least reuseable order) so that you don&rsquo;t have to dig
 <time datetime="2015-04-03T00:48:00+01:00" pubdate data-updated="true">Apr 3<span>rd</span>, 2015</time>
       
 
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/aws/'>aws,</a>, <a class='category' href='/blog/categories/devops/'>devops</a>, <a class='category' href='/blog/categories/terraform/'>terraform,</a>
+  
+</span>
+
 
     </p>
     
@@ -168,6 +176,8 @@ list them (in most to least reuseable order) so that you don&rsquo;t have to dig
         <a class="basic-alignment left" href="/blog/2015/03/29/terraform-from-the-ground-up/" title="Previous Post: Terraform from the ground up">&laquo; Terraform from the ground up</a>
       
       
+        <a class="basic-alignment right" href="/blog/2015/04/06/diy-scalable-paas-with-terraform/" title="Next Post: DIY Scalable PAAS with Terraform">DIY Scalable PAAS with Terraform &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -179,6 +189,10 @@ list them (in most to least reuseable order) so that you don&rsquo;t have to dig
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/04/06/diy-scalable-paas-with-terraform/">DIY Scalable PAAS With Terraform</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2015/04/03/terraform-0-dot-4-0/">Terraform 0.4.0</a>
@@ -194,10 +208,6 @@ list them (in most to least reuseable order) so that you don&rsquo;t have to dig
     
       <li class="post">
         <a href="/blog/2014/08/13/dockersh/">Dockersh</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/26/code-as-config-considered-harmful/">Code as Config Considered Harmful</a>
       </li>
     
   </ul>
