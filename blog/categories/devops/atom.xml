@@ -4,7 +4,7 @@
   <title><![CDATA[Category: devops | t0m's very occasional blog]]></title>
   <link href="http://bobtfish.github.io/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2015-04-07T18:43:32+01:00</updated>
+  <updated>2015-04-07T18:48:57+01:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -89,7 +89,7 @@ aws_access_key_id=AAAAAAAA
 aws_secret_access_key=BBBBBBBBBBBBBBBBB
 </code></pre>
 
-<p>Or if you prefer (and you trust me!), [here&rsquo;s a .deb[(<a href="http://notanisp-packages.s3-website-eu-west-1.amazonaws.com/dists/precise/main/binary-amd64/terraform_0.4.0-bobtfish0_amd64.deb">http://notanisp-packages.s3-website-eu-west-1.amazonaws.com/dists/precise/main/binary-amd64/terraform_0.4.0-bobtfish0_amd64.deb</a>)
+<p>Or if you prefer (and you trust me!), <a href="http://notanisp-packages.s3-website-eu-west-1.amazonaws.com/dists/precise/main/binary-amd64/terraform_0.4.0-bobtfish0_amd64.deb">here&rsquo;s a .deb</a>
 you should be able to just install:</p>
 
 <h2>Building your cluster</h2>
