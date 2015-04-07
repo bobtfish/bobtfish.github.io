@@ -194,7 +194,7 @@ the example app up to 5 instances, or down to 1 instance and then killing 4/5 of
   * Whilst the cluster we build is redundant, currently all the machines are allocated in a single availability zone.
 I'll be investigating if I can get a way of generically deploying the cluster across two (or three if available) availability zones.
 
-  * Currently he machine's Internet access goes through a single NAT instance with no failover - this needs rectifying.
+  * Currently the machine's Internet access goes through a single NAT instance with no failover - this needs rectifying.
 
   * The machines have no configuration management (no puppet/chef), which means that making any changes to them (or getting
 any security updates) involves rebuilding the instances.
