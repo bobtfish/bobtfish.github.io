@@ -4,7 +4,7 @@
   <title><![CDATA[Category: aws, | t0m's very occasional blog]]></title>
   <link href="http://bobtfish.github.io/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2015-04-07T18:48:57+01:00</updated>
+  <updated>2015-04-08T00:25:43+01:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -181,7 +181,7 @@ to a vhost on the load balancer. Pretty neat, eh?</p>
 <p>We <a href="https://github.com/bobtfish/terraform-example-mesos-cluster/blob/master/eucentral1-demo/vpc.tf">ask for a VPC to be built</a>
 (with the <a href="https://github.com/bobtfish/terraform-vpc-nat">module I created</a> in <a href="http://bobtfish.github.io/blog/2015/03/29/terraform-from-the-ground-up/">a previous post</a>).</p>
 
-<p>This gives us &lsquo;front&rsquo; and &lsquo;back&rsquo; networks, and a <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html">NAT instance</a>.</p>
+<p>This gives us &lsquo;private&rsquo; and &lsquo;public&rsquo; subnets, and a <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html">NAT instance</a>.</p>
 
 <p>On top of that, we build out a <a href="https://github.com/bobtfish/terraform-example-mesos-cluster/blob/master/eucentral1-demo/mesos.tf">mesos cluster</a></p>
 
