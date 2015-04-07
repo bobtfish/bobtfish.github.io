@@ -4,7 +4,6 @@ title: "DIY Scalable PAAS with Terraform"
 date: 2015-04-06 23:45
 comments: true
 categories: terraform, aws, devops
-published: false
 ---
 
 I've been ranting about [Terraform](https://www.terraform.io/) [a](/blog/2015/03/29/terraform-from-the-ground-up/) [lot](/blog/2015/04/03/terraform-0-dot-4-0/) recently, and I've shown some pretty
