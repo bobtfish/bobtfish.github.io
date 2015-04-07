@@ -159,7 +159,7 @@ to a vhost on the load balancer. Pretty neat, eh?
 We [ask for a VPC to be built](https://github.com/bobtfish/terraform-example-mesos-cluster/blob/master/eucentral1-demo/vpc.tf)
 (with the [module I created](https://github.com/bobtfish/terraform-vpc-nat) in [a previous post](http://bobtfish.github.io/blog/2015/03/29/terraform-from-the-ground-up/)).
 
-This gives us 'front' and 'back' networks, and a [NAT instance](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html).
+This gives us 'private' and 'public' subnets, and a [NAT instance](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html).
 
 On top of that, we build out a [mesos cluster](https://github.com/bobtfish/terraform-example-mesos-cluster/blob/master/eucentral1-demo/mesos.tf)
 
