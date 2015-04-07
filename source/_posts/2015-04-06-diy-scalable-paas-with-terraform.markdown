@@ -130,7 +130,7 @@ into marathon:
 
 ![App deploying](/images/marathon_deploy.png)
 
-and after a couple of mins, you should be able to access it from www.mesos.notanisp.net
+and after a couple of mins, you should be able to access it from http://www.mesos.notanisp.net
 
 Any additional apps you launch in Marathon with names like /someapp will be automatically bound
 to a vhost on the load balancer. Pretty neat, eh?
