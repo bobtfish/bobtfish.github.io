@@ -71,7 +71,7 @@ Adding something like this:
     aws_access_key_id=AAAAAAAA
     aws_secret_access_key=BBBBBBBBBBBBBBBBB
 
-Or if you prefer (and you trust me!), [here's a .deb[(http://notanisp-packages.s3-website-eu-west-1.amazonaws.com/dists/precise/main/binary-amd64/terraform_0.4.0-bobtfish0_amd64.deb)
+Or if you prefer (and you trust me!), [here's a .deb](http://notanisp-packages.s3-website-eu-west-1.amazonaws.com/dists/precise/main/binary-amd64/terraform_0.4.0-bobtfish0_amd64.deb)
 you should be able to just install:
 
 ## Building your cluster
