@@ -96,8 +96,8 @@ State path: terraform.tfstate
 
 Outputs:
 
-  marathon_api  = http://marathon.admin.other.notanisp.net
-  nat_public_ip = 52.28.37.248
+  marathon_api  = http://marathon.admin.mesos.notanisp.net
+  nat_public_ip = 52.28.37.228
 ```
 
 Once it's finished, go into the route 53 control panel, and you should see your subdomain zone.
