@@ -54,6 +54,7 @@ The easiest way to get my patched version of terraform is to build it in vagrant
     sudo apt-get install -y ruby ruby-json python-pip
     sudo pip install awscli
     export PATH=$PATH:/opt/go/bin:/opt/gopath/bin
+    echo 'export PATH=$PATH:/opt/go/bin:/opt/gopath/bin' >> ~/.bashrc
     mkdir -p /opt/gopath/src/github.com/hashicorp
     cp -r /vagrant /opt/gopath/src/github.com/hashicorp/terraform
     cd /opt/gopath/src/github.com/hashicorp/terraform
