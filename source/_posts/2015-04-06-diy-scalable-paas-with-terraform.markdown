@@ -25,6 +25,25 @@ My example domain is _notanisp.net_, and so the subdomain I'm going to use in al
 You'll also need the [AWS cli](http://aws.amazon.com/cli/) and an [~/.aws/credentials](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files)
 file with a _[demo]_ section in it.
 
+In your AWS account, you need to go into the IAM menus, and create a '[Role](http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-usingrole-instanceprofile.html)',
+which will be given to the machines we launch, to [allow them to find out other instances](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ExamplePolicies_EC2.html).
+
+Your policy should be named _describe-instances_ and the body of the policy should contain an inline policy:
+
+    {
+       "Version": "2012-10-17",
+       "Statement": [{
+          "Effect": "Allow",
+          "Action": "ec2:Describe*",
+          "Resource": "*"
+        }
+       ]
+    }
+
+If you're feeling lazy, then you can just create the role with the policy of AmazonEC2ReadOnlyAccess.
+
+## Getting terraform
+
 The easiest way to get my patched version of terraform is to build it in vagrant:
 
 ```
