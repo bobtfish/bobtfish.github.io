@@ -4,7 +4,7 @@
   <title><![CDATA[Category: aws, | t0m's very occasional blog]]></title>
   <link href="http://bobtfish.github.io/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2015-04-08T00:25:43+01:00</updated>
+  <updated>2015-04-11T20:36:59+01:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -383,7 +383,7 @@ tertiary availability zone (ordered by alphabetical sort).</p>
 
 <p>```
 module &ldquo;az&rdquo; {
-  source = &ldquo;github.com/bobtfish/terraform-azs&rdquo;
+  source = &ldquo;github.com/terraform-community-modules/tf_aws_availability_zones&rdquo;
   region = &ldquo;eu-central-1&rdquo;
   account = &ldquo;demo&rdquo;
 }</p>
