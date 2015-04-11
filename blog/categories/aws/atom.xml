@@ -4,7 +4,7 @@
   <title><![CDATA[Category: aws, | t0m's very occasional blog]]></title>
   <link href="http://bobtfish.github.io/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2015-04-12T00:05:28+01:00</updated>
+  <updated>2015-04-12T00:28:13+01:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -261,7 +261,7 @@ yourself, and I encourage <a href="https://github.com/bobtfish/terraform-example
 <p>If you take <a href="https://github.com/bobtfish/terraform-example-vpc/tree/master/eucentral1-demo">the example VPC</a>
 from my last post (with the state file committed), you can now pull in the data in another terraform
 repository <a href="https://github.com/bobtfish/terraform-example-vpc-infra/blob/master/eucentral1-demo/vpc.tf">like this</a>
-and then use the outputs it defines <a href="https://github.com/bobtfish/terraform-example-vpc-infra/blob/master/eucentral1-demo/kubernates.tf#L8">like this</a>.</p>
+and then use the outputs it defines <a href="https://github.com/bobtfish/terraform-example-vpc-infra/blob/master/eucentral1-demo/mesos.tf#L8">like this</a>.</p>
 
 <p>This is pretty neat, and it&rsquo;ll be super cool to allow multiple teams to work on different layers
 of the infrastructure, using the <a href="https://www.terraform.io/docs/commands/remote.html">consul state store</a> and <a href="https://www.consul.io/docs/internals/acl.html">ACLs</a>,
@@ -273,12 +273,13 @@ more news on that once I&rsquo;ve had chance to play with it.</p>
 list them (in most to least reuseable order) so that you don&rsquo;t have to dig through all the code or my github to find them :)</p>
 
 <ul>
-<li><a href="https://github.com/bobtfish/terraform-amitype">terraform-amitype</a> &ndash; Match an AMI type (e.g. m3.xlarge) to its virtualization type (e.g. hvm)</li>
-<li><a href="https://github.com/bobtfish/terraform-azs">terraform-azs</a> &ndash; Work out which azs each of your accounts has access to for easy lookup/templating across accounts.</li>
+<li><a href="https://github.com/terraform-community-modules/tf_aws_virttype">tf_aws_virttype</a> &ndash; Match an AMI type (e.g. m3.xlarge) to its virtualization type (e.g. hvm)</li>
+<li><a href="https://github.com/terraform-community-modules/tf_aws_availability_zones">tf_aws_availability_zones</a> &ndash; Work out which azs each of your accounts has access to for easy lookup/templating across accounts.</li>
 <li><a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami">tf_aws_ubuntu_ami</a> &ndash; Look up Ubuntu <a href="http://cloud-images.ubuntu.com/locator/ec2/">AMIs</a></li>
 <li><a href="https://github.com/terraform-community-modules/tf_aws_ubuntu_ami">tf_aws_coreos_ami</a> &ndash; Look up the most recent <a href="https://coreos.com/">CoreOS</a> <a href="https://coreos.com/docs/running-coreos/cloud-providers/ec2/">AMI</a></li>
 <li><a href="https://github.com/bobtfish/terraform-vpc">terraform-vpc</a> &ndash; Build out an initial VPC with 2 AZs</li>
-<li><a href="https://github.com/bobtfish/terraform-vpc-nat">terraform-vpc-nat</a> &ndash; Build an initial NAT instance out on top of a VPC made with terraform-vpc</li>
+<li><a href="https://github.com/bobtfish/terraform-vpc-nat">terraform-vpc-nat</a> &ndash; Build NAT instances out on top of a VPC made with terraform-vpc</li>
+<li><a href="https://github.com/bobtfish/tf_aws_mesos">tf_aws_mesos</a> &ndash; Launch a Mesos cluster into a VPC and across multiple AZs</li>
 <li><a href="https://github.com/bobtfish/terraform-aws-coreos-kubernates-cluster">terraform-aws-coreos-kubernates-cluster</a> &ndash; Kubernates cluster on CoreOS (n.b. not yet working out the box, needs patched terraform)</li>
 </ul>
 
