@@ -353,6 +353,24 @@ and run make again. This pulls in all the necessary modules (using terraform get
 <span class='line-number'>27</span>
 <span class='line-number'>28</span>
 <span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>eucentral1-demo (master👆 ✔) ⭐ make
 </span><span class='line'>terraform get
 </span><span class='line'>Get: git::https://github.com/terraform-community-modules/tf_aws_ubuntu_ami.git
@@ -381,7 +399,25 @@ and run make again. This pulls in all the necessary modules (using terraform get
 </span><span class='line'>
 </span><span class='line'>Outputs:
 </span><span class='line'>
-</span><span class='line'>  nat-public-ip = 52.28.22.233</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>  account                   = demo
+</span><span class='line'>  admin_key_name            = deployer-key
+</span><span class='line'>  azs                       = eu-central-1a,eu-central-1b
+</span><span class='line'>  cidr_block                = 10.1.0.0/16
+</span><span class='line'>  dedicatedsubnets          = subnet-8a1ec9e3,subnet-0ea25475
+</span><span class='line'>  default_network_acl_id    = acl-d14488b8
+</span><span class='line'>  default_security_group_id = sg-16cc1f7f
+</span><span class='line'>  ephemeralsubnets          = subnet-8d1ec9e4,subnet-3fa05644
+</span><span class='line'>  frontsubnets              = subnet-8c1ec9e5,subnet-0da25476
+</span><span class='line'>  id                        = vpc-540dcf3d
+</span><span class='line'>  main_route_table_id       = rtb-998d42f0
+</span><span class='line'>  nat_instances             = i-91782a5f,i-e7d96d26
+</span><span class='line'>  nat_private_ips           = 10.1.0.99,10.1.1.75
+</span><span class='line'>  nat_public_ips            = 52.28.54.125,52.28.54.128
+</span><span class='line'>  networkprefix             = 10.1
+</span><span class='line'>  private-routetable        = rtb-998d42f0
+</span><span class='line'>  public-routetable         = rtb-958e41fc
+</span><span class='line'>  region                    = eu-central-1
+</span><span class='line'>  security_group_allow_all  = sg-edcc1f84</span></code></pre></td></tr></table></div></figure>
 
 
 <p>You should be able to ssh to your nat instance:</p>
@@ -392,7 +428,7 @@ make sshnat
 
 <p>and from there, ssh into your back network host:</p>
 
-<pre><code>ssh 10.1.1.4
+<pre><code>ssh 10.1.10.4
 </code></pre>
 
 <p>and you should see <a href="https://www.consul.io/">consul</a> running (in Docker <a href="https://pbs.twimg.com/media/CBHd3OVUwAA8FBh.png:large">of course</a>)</p>

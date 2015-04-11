@@ -4,7 +4,7 @@
   <title><![CDATA[Category: aws, | t0m's very occasional blog]]></title>
   <link href="http://bobtfish.github.io/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2015-04-11T20:36:59+01:00</updated>
+  <updated>2015-04-12T00:05:28+01:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -503,7 +503,25 @@ aws_key_pair.deployer: Creating&hellip;</p>
 
 <p>Outputs:</p>
 
-<p>  nat-public-ip = 52.28.22.233
+<p>  account                   = demo
+  admin_key_name            = deployer-key
+  azs                       = eu-central-1a,eu-central-1b
+  cidr_block                = 10.1.0.0/16
+  dedicatedsubnets          = subnet-8a1ec9e3,subnet-0ea25475
+  default_network_acl_id    = acl-d14488b8
+  default_security_group_id = sg-16cc1f7f
+  ephemeralsubnets          = subnet-8d1ec9e4,subnet-3fa05644
+  frontsubnets              = subnet-8c1ec9e5,subnet-0da25476
+  id                        = vpc-540dcf3d
+  main_route_table_id       = rtb-998d42f0
+  nat_instances             = i-91782a5f,i-e7d96d26
+  nat_private_ips           = 10.1.0.99,10.1.1.75
+  nat_public_ips            = 52.28.54.125,52.28.54.128
+  networkprefix             = 10.1
+  private-routetable        = rtb-998d42f0
+  public-routetable         = rtb-958e41fc
+  region                    = eu-central-1
+  security_group_allow_all  = sg-edcc1f84
 ```</p>
 
 <p>You should be able to ssh to your nat instance:</p>
@@ -514,7 +532,7 @@ make sshnat
 
 <p>and from there, ssh into your back network host:</p>
 
-<pre><code>ssh 10.1.1.4
+<pre><code>ssh 10.1.10.4
 </code></pre>
 
 <p>and you should see <a href="https://www.consul.io/">consul</a> running (in Docker <a href="https://pbs.twimg.com/media/CBHd3OVUwAA8FBh.png:large">of course</a>)</p>
