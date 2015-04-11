@@ -166,7 +166,7 @@ On top of that, we build out a [mesos cluster](https://github.com/bobtfish/terra
 This comprises a number of pieces, first of all [masters](https://github.com/bobtfish/tf_aws_mesos/blob/master/mesos_master/master.conf), which
 run [zookeeper](https://zookeeper.apache.org/) in addition to Marathon and Mesos. We run 3 of these by default, so one can fail without
 affecting the operation of the cluster. Also there are [slaves](https://github.com/bobtfish/tf_aws_mesos/blob/master/mesos_slave/slave.conf)
-which actually run the Mesos workers and excute applications. We launch 5 of these, and if one fails then any tasks it was running
+which actually run the Mesos workers and excute applications. We launch 3 of these, and if one fails then any tasks it was running
 will be re-launched on the remaining slaves (assuming they have enough resources to do so!).
 
 Then we deploy 2 [load balancers](https://github.com/bobtfish/tf_aws_mesos/blob/master/lb/lb.conf) which discover the running applications from the marathon
@@ -191,10 +191,9 @@ the example app up to 5 instances, or down to 1 instance and then killing 4/5 of
 
 ## TODOs
 
-  * Whilst the cluster we build is redundant, currently all the machines are allocated in a single availability zone.
-I'll be investigating if I can get a way of generically deploying the cluster across two (or three if available) availability zones.
-
-  * Currently the machine's Internet access goes through a single NAT instance with no failover - this needs rectifying.
+  * Currently the machine's Internet access goes through a single NAT instance with no failover - we now deploy a NAT instance per AZ, so solutions are either:
+    * Have a route table per AZ to send traffic for each AZ out that AZ's NAT box
+    * Have failover between NAT boxes (keepalived+modifying the route table(s))
 
   * The machines have no configuration management (no puppet/chef), which means that making any changes to them (or getting
 any security updates) involves rebuilding the instances.
