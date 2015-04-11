@@ -98,7 +98,7 @@ tertiary availability zone (ordered by alphabetical sort).
 
 ```
 module "az" {
-  source = "github.com/bobtfish/terraform-azs"
+  source = "github.com/terraform-community-modules/tf_aws_availability_zones"
   region = "eu-central-1"
   account = "demo"
 }
