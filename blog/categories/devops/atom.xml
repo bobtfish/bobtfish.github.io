@@ -4,7 +4,7 @@
   <title><![CDATA[Category: devops | t0m's very occasional blog]]></title>
   <link href="http://bobtfish.github.io/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2015-04-12T00:28:13+01:00</updated>
+  <updated>2015-04-12T00:32:17+01:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -188,7 +188,7 @@ to a vhost on the load balancer. Pretty neat, eh?</p>
 <p>This comprises a number of pieces, first of all <a href="https://github.com/bobtfish/tf_aws_mesos/blob/master/mesos_master/master.conf">masters</a>, which
 run <a href="https://zookeeper.apache.org/">zookeeper</a> in addition to Marathon and Mesos. We run 3 of these by default, so one can fail without
 affecting the operation of the cluster. Also there are <a href="https://github.com/bobtfish/tf_aws_mesos/blob/master/mesos_slave/slave.conf">slaves</a>
-which actually run the Mesos workers and excute applications. We launch 5 of these, and if one fails then any tasks it was running
+which actually run the Mesos workers and excute applications. We launch 3 of these, and if one fails then any tasks it was running
 will be re-launched on the remaining slaves (assuming they have enough resources to do so!).</p>
 
 <p>Then we deploy 2 <a href="https://github.com/bobtfish/tf_aws_mesos/blob/master/lb/lb.conf">load balancers</a> which discover the running applications from the marathon
@@ -214,9 +214,13 @@ the example app up to 5 instances, or down to 1 instance and then killing 4/5 of
 <h2>TODOs</h2>
 
 <ul>
-<li><p>Whilst the cluster we build is redundant, currently all the machines are allocated in a single availability zone.
-I&rsquo;ll be investigating if I can get a way of generically deploying the cluster across two (or three if available) availability zones.</p></li>
-<li><p>Currently the machine&rsquo;s Internet access goes through a single NAT instance with no failover &ndash; this needs rectifying.</p></li>
+<li><p>Currently the machine&rsquo;s Internet access goes through a single NAT instance with no failover &ndash; we now deploy a NAT instance per AZ, so solutions are either:</p>
+
+<ul>
+<li>Have a route table per AZ to send traffic for each AZ out that AZ&rsquo;s NAT box</li>
+<li>Have failover between NAT boxes (keepalived+modifying the route table(s))</li>
+</ul>
+</li>
 <li><p>The machines have no configuration management (no puppet/chef), which means that making any changes to them (or getting
 any security updates) involves rebuilding the instances.</p></li>
 </ul>
