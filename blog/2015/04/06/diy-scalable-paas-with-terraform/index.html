@@ -140,30 +140,10 @@ which will be given to the machines we launch, to <a href="http://docs.aws.amazo
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>git clone https://github.com/bobtfish/terraform.git
 </span><span class='line'>cd terraform
 </span><span class='line'>vagrant up
 </span><span class='line'>vagrant ssh
-</span><span class='line'>sudo apt-get install -y ruby ruby-json python-pip
-</span><span class='line'>sudo pip install awscli
-</span><span class='line'>export PATH=$PATH:/opt/go/bin:/opt/gopath/bin
-</span><span class='line'>echo 'export PATH=$PATH:/opt/go/bin:/opt/gopath/bin' &gt;&gt; ~/.bashrc
-</span><span class='line'>mkdir -p /opt/gopath/src/github.com/hashicorp
-</span><span class='line'>cp -r /vagrant /opt/gopath/src/github.com/hashicorp/terraform
-</span><span class='line'>cd /opt/gopath/src/github.com/hashicorp/terraform
-</span><span class='line'>make updatedeps
-</span><span class='line'>make dev
-</span><span class='line'>cd ~/
 </span><span class='line'>git clone https://github.com/bobtfish/terraform-example-mesos-cluster
 </span><span class='line'>mkdir ~/.aws
 </span><span class='line'>vi ~/.aws/credentials</span></code></pre></td></tr></table></div></figure>

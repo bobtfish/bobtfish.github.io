@@ -4,7 +4,7 @@
   <title><![CDATA[Category: devops | t0m's very occasional blog]]></title>
   <link href="http://bobtfish.github.io/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://bobtfish.github.io/"/>
-  <updated>2015-04-12T00:32:17+01:00</updated>
+  <updated>2015-04-12T11:45:20+01:00</updated>
   <id>http://bobtfish.github.io/</id>
   <author>
     <name><![CDATA[Tomas Doran]]></name>
@@ -65,16 +65,6 @@ which will be given to the machines we launch, to <a href="http://docs.aws.amazo
 cd terraform
 vagrant up
 vagrant ssh
-sudo apt-get install -y ruby ruby-json python-pip
-sudo pip install awscli
-export PATH=$PATH:/opt/go/bin:/opt/gopath/bin
-echo 'export PATH=$PATH:/opt/go/bin:/opt/gopath/bin' &gt;&gt; ~/.bashrc
-mkdir -p /opt/gopath/src/github.com/hashicorp
-cp -r /vagrant /opt/gopath/src/github.com/hashicorp/terraform
-cd /opt/gopath/src/github.com/hashicorp/terraform
-make updatedeps
-make dev
-cd ~/
 git clone https://github.com/bobtfish/terraform-example-mesos-cluster
 mkdir ~/.aws
 vi ~/.aws/credentials
